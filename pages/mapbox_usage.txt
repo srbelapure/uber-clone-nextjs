@@ -1,0 +1,10 @@
+How to use mapbox to add maps in our application:
+1] go to mapbox.com. create an account
+    email: sonali24111994@gmail.com
+    pwd: srb123456
+2] then, verify your email link 
+3] in the popup select the option desired
+4] then go to -> tutorials -> Use Mapbox GL JS in a React app -> go to 'Set the app's default state' -> select the useEffect hook snippet and paste in Map.js
+    -> then change the snippet a bit (refer Map.js)
+    add an id to the map tag and use the same aginst the 'container' key in useEffect hook,change style,add USA co-ordinates,set zoom number
+    Also, in the Map.js import mapBox and add accessToken

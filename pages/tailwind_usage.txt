@@ -1,0 +1,12 @@
+How to start using tailwind:
+
+1] google - tailwind styles components
+2] scroll down and go to 'Install' section, click on ' Install TailwindCSS', then click on nextjs section
+3] then use command , npm install -D tailwindcss@latest postcss@latest autoprefixer@latest
+4] then , npx tailwindcss init -p ---- this creates a tailwind.config.js file
+5] then add, this purge: ['./pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'], in tailwind.config.js
+6] then import this in _app.js, import 'tailwindcss/tailwind.css'
+7] then, add this to page were we are planning to use tailwind, import tw from "tailwind-styled-components"
+8] then, in the .js file inside the component/function, we create our own class tags,
+    then, use const tagname = tw.div``[tw.any tag we want ex: span,p etc etc]
+9] Then, inside the back ticks we define the css required
