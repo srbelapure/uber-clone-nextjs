@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import tw from "tailwind-styled-components";
 import Link from "next/link";
 
 const Search = () => {
+  const [pickup, setPickup] = useState("");
+  const [dropoff, setDropoff] = useState("");
   return (
     <Wrapper>
       {/* button container */}
@@ -31,8 +33,18 @@ const Search = () => {
           />
         </FromToIcons>
         <InputBoxes>
-          <Input type="text" placeholder="Enter pickup location" />
-          <Input type="text" placeholder="Enter drop location" />
+          <Input
+            type="text"
+            placeholder="Enter pickup location"
+            value={pickup}
+            onChange={(e) => setPickup(e.target.value)}
+          />
+          <Input
+            type="text"
+            placeholder="Enter drop location"
+            value={dropoff}
+            onChange={(e) => setDropoff(e.target.value)}
+          />
         </InputBoxes>
         <PlusIcon
           src="https://img.icons8.com/ios/50/000000/plus-math.png"
@@ -48,7 +60,17 @@ const Search = () => {
         Saved Places
       </SavedPlaces>
       {/* confirm location */}
-      <ConfirmButtonContainer>Confirm Location</ConfirmButtonContainer>
+      <Link
+        href={{
+          pathname: "/confirm",
+          query: {
+            pickuplocation: pickup,
+            dropofflocation: dropoff,
+          },
+        }}
+      >
+        <ConfirmButtonContainer>Confirm Location</ConfirmButtonContainer>
+      </Link>
     </Wrapper>
   );
 };
@@ -66,7 +88,8 @@ const Circle = tw.img`h-2.5`;
 const Line = tw.img`h-10`;
 const Square = tw.img`h-3`;
 const InputBoxes = tw.div`flex flex-col flex-1`;
-const Input = tw.input`h-10 bg-gray-200 my-2 rounded-2 p-2 outline-none border-none`;
+const Input = tw.input`h-10 bg-gray-200 my-2 rounded-2 p-2 outline-none 
+border-none`;
 const PlusIcon = tw.img`w-10 h-10 bg-gray-200 rounded-full ml-3`;
 const SavedPlaces = tw.div`flex items-center bg-white px-4 py-2`;
 const StarIcon = tw.img`bg-gray-400 w-10 h-10 p-2 rounded-full mr-2`;
