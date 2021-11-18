@@ -8,7 +8,6 @@ const Search = () => {
   const [pickup, setPickup] = useState("");
   const [dropoff, setDropoff] = useState("");
   const [routemode, setRouteMode] = useState('')
-  console.log("routemode",routemode)
 
   const onClickPickupLocation =(selectedLocation)=>{
     setPickup(selectedLocation)

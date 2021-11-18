@@ -30,10 +30,6 @@ export default function Home() {
   }, []);
 
   return (
-    // <div className={styles.container}>
-    // <div className={styles.map}>Map</div>
-    // <div className={styles.start}>start</div>
-    // </div>
     <Wrapper>
       <Map />
       <ActionItems>

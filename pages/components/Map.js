@@ -35,16 +35,16 @@ const Map = (props) => {
  * import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 * do npm install for geocoder
-*/
+
     // const geocoder = new MapboxGeocoder({
     //   // Initialize the geocoder
     //   accessToken: mapboxgl.accessToken, // Set the access token
     //   mapboxgl: mapboxgl, // Set the mapbox-gl instance
     //   marker: false // Do not use the default marker style
     // });
-    
     // // Add the geocoder to the map
     // map.addControl(geocoder);
+*/
 
     //Below is the code used to add a route line between sourec and destination
     // start has pickup coordinates and end has dropoff coordinates

@@ -58,19 +58,9 @@ const GeoCoderInput = (props) => {
       (bbox ? "&bbox=" + bbox : "") +
       (types ? "&types=" + encodeURIComponent(types) : "");
 
-    //   xhr(
-    //   {
-    //     uri: uri,
-    //     json: true,
-    //   },
-    //   function (err, res, body) {
-    //     callback(err, res, body, searchTime);
-    //   }
-    // );
 
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function (e) {
-      console.log(this);
       if (xhttp.readyState === 4 && xhttp.status === 200) {
         console.log("ok, response :", this.response);
 
@@ -84,20 +74,7 @@ const GeoCoderInput = (props) => {
       function (err, res, body) {
         callback(err, res, body, searchTime);
       };
-    //   function (err, res, body) {
-    //     callback(err, res, body, searchTime);
-    //   }
   };
-
-  //   const clickOption = (place,listLocation) => {
-  //     this.props.onSelect(place);
-  //     this.setState({focus:listLocation});
-  //     // focus on the input after click to maintain key traversal
-  //     ReactDOM.findDOMNode(this.refs.input).focus();
-  //     return false;
-  //   };
-
-  const onSelectOption = () => {};
 
   const onResult = (err, res, body, searchTime) => {
     // searchTime is compared with the last search to set the state
@@ -110,7 +87,6 @@ const GeoCoderInput = (props) => {
         results: body.features,
         focus: null,
       });
-      //   this.props.onSuggest(this.state.results);
     }
   };
 
@@ -121,16 +97,6 @@ const GeoCoderInput = (props) => {
     });
   }
 
-//   var input = (
-//     <input
-//       type="text"
-//       placeholder={props.placeholder}
-//       value={props.pickup}
-//       onInput={onInput}
-//       onChange={props.onChange}
-//     />
-//   );
-console.log("props.pickup",props.pickup==='',props.pickup)
   return (
     <Wrapper>
       {/* {input} */}
@@ -141,24 +107,12 @@ console.log("props.pickup",props.pickup==='',props.pickup)
       onInput={onInput}
       onChange={props.onChange}
       />
-     {
-         console.log("SRB_pickupresults",
-         props.hidePickupResults)
-    // console.log('optionsstate.showResults_____',optionsstate.showResults)
-     }
-     {
-         
-         console.log("SRB_dropoffresults",
-         props.hideDropoffResults)
-     }
-      {/* {console.log("optionsstate.results.features",optionsstate.results.features)} */}
-      
+
       {optionsstate.results &&
         optionsstate.results.features &&
         optionsstate.results.features.length > 0 && (
           <UnorderedList className={optionsstate.loading ? "loading" : ""}>
             {optionsstate.results.features.map((result, index) => {
-              console.log("resultresultresultresultresult", result);
               return (
                 <UnorderedListSubElement 
                 key={result.id}
@@ -166,8 +120,6 @@ console.log("props.pickup",props.pickup==='',props.pickup)
                 >
                   <UnorderedListItem
                     href="#"
-                    //   onClick={() => clickOption(result, i)}
-                    //   onClick={()=>onSelectOption(result.place_name)}
                     key={result.id}
                   >
                     {result.place_name}

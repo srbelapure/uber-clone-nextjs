@@ -17,7 +17,6 @@ const RideSelector = (props) => {
         ?access_token=pk.eyJ1IjoiY29kZXIxOTk0IiwiYSI6ImNrdm12eHhhbzNpODQydm55M3RkYzQ0dnAifQ.4765hgdfnCSdO1LxiOYDdA`)
         .then(res=> res.json())
         .then(data =>{
-            // console.log("dataaaaaaaaaaaaaaaaauuuuuuu",data)
             if(data.routes && data.routes[0].duration){
                 setRideDuration(data.routes[0].duration/100)
             }
