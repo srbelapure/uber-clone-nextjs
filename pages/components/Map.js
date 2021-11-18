@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import tw from "tailwind-styled-components";
 import mapboxgl from "mapbox-gl";
 
+
 mapboxgl.accessToken =
   "pk.eyJ1IjoiY29kZXIxOTk0IiwiYSI6ImNrdm12eHhhbzNpODQydm55M3RkYzQ0dnAifQ.4765hgdfnCSdO1LxiOYDdA";
 
@@ -30,6 +31,21 @@ const Map = (props) => {
       });
     }
 
+/**This MapboxGeocoder when called on map, it adds an input box with auto suggestions
+ * import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
+import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
+* do npm install for geocoder
+*/
+    // const geocoder = new MapboxGeocoder({
+    //   // Initialize the geocoder
+    //   accessToken: mapboxgl.accessToken, // Set the access token
+    //   mapboxgl: mapboxgl, // Set the mapbox-gl instance
+    //   marker: false // Do not use the default marker style
+    // });
+    
+    // // Add the geocoder to the map
+    // map.addControl(geocoder);
+
     //Below is the code used to add a route line between sourec and destination
     // start has pickup coordinates and end has dropoff coordinates
 
@@ -40,7 +56,7 @@ const Map = (props) => {
       // an arbitrary start will always be the same
       // only the end or destination will change
       const query = await fetch(
-        `https://api.mapbox.com/directions/v5/mapbox/cycling/${start[0]},${start[1]};${end[0]},${end[1]}?steps=true&geometries=geojson&access_token=${mapboxgl.accessToken}`,
+        `https://api.mapbox.com/directions/v5/mapbox/${props.routemode}/${start[0]},${start[1]};${end[0]},${end[1]}?steps=true&geometries=geojson&access_token=${mapboxgl.accessToken}`,
         { method: "GET" }
       );
       const json = await query.json();

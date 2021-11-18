@@ -99,6 +99,6 @@ const Name = tw.div`mr-4 w-15 text-sm`;
 const UserImage = tw.img`h-10 w-10 rounded-full border-gray-200 p-px cursor-pointer`;
 const ActionButtons = tw.div`flex`;
 const ActionButton = tw.div`bg-gray-200 m-1 mr-5 h-32 flex flex-col flex-1
-items-center justify-center rounded-lg transform hover:scale-105 transistion text-xl`;
+items-center justify-center rounded-lg transform hover:scale-105 transistion text-xl cursor-pointer`;
 const ActionButtonImage = tw.img`h-3/5`;
 const InputButton = tw.div`h-20 bg-gray-200 text-2xl p-4 flex items-center mt-8`;

@@ -5,7 +5,9 @@ module.exports = {
     extend: {},
   },
   variants: {
-    extend: {},
+    extend: {
+      backgroundColor: ['active'], //This has been added to support for active Pseudo-class in tailwind.css
+    },
   },
   plugins: [],
 }

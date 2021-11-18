@@ -9,10 +9,11 @@ import RideSelector from "./components/RideSelector";
 const Confirm = () => {
   const router = useRouter();
 
-  const { pickuplocation, dropofflocation } = router.query;
+  const { pickuplocation, dropofflocation , routemode} = router.query;
 
   console.log("pickuplocation**********", pickuplocation);
   console.log("dropofflocation**************", dropofflocation);
+  console.log("routemoderoutemoderoutemoderoutemoderoutemode",routemode)
 
   const [pickUpCoordinates, setPickupCoordinates] = useState([0, 0]);
   const [dropoffCoordinates, setDropoffCoordinates] = useState([0, 0]);
@@ -124,6 +125,7 @@ const Confirm = () => {
       <Map
         pickUpCoordinates={pickUpCoordinates}
         dropoffCoordinates={dropoffCoordinates}
+        routemode={routemode}
       />
       {/* ride container */}
       <RidesContainer>
