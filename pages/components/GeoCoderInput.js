@@ -62,8 +62,7 @@ const GeoCoderInput = (props) => {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function (e) {
       if (xhttp.readyState === 4 && xhttp.status === 200) {
-        console.log("ok, response :", this.response);
-
+        // console.log("ok, response :", this.response);
         setOptionsState({
           results: JSON.parse(this.response),
         });

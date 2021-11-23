@@ -5,14 +5,21 @@ import Link from "next/link";
 
 import Map from "./components/Map";
 import RideSelector from "./components/RideSelector";
+import Popup from "./components/Modal";
 
 const Confirm = () => {
   const router = useRouter();
 
-  const { pickuplocation, dropofflocation , routemode} = router.query;
+  const { pickuplocation, dropofflocation , routemode,userLocation} = router.query;
 
   const [pickUpCoordinates, setPickupCoordinates] = useState([0, 0]);
   const [dropoffCoordinates, setDropoffCoordinates] = useState([0, 0]);
+
+  const [showModal, setShowModal] = useState(false);
+  const [confirmButtonEnabled, setConfirmButtomEnabled] = useState(false)
+  const [confirmedridedetails, setConfirmedRideDetails] = useState([{
+    carname:'',minsaway:'',ridefare:''
+  }])
 
   const getPickupCoordinates = (pickupLocationValue) => {
     const pickup = pickupLocationValue;
@@ -51,9 +58,28 @@ const Confirm = () => {
   };
 
   useEffect(() => {
-    getPickupCoordinates(pickuplocation);
+    getPickupCoordinates(pickuplocation ? pickuplocation : userLocation);
     getDropOffCoordinates(dropofflocation);
-  }, [pickuplocation, dropofflocation]);
+  }, [pickuplocation, dropofflocation,userLocation]);
+
+  const getSelectedRideDetails=(ridedetails,rideduration)=>{
+    if (ridedetails && rideduration) {
+      var rideDuration = (rideduration * ridedetails.multiplier).toFixed(2);
+      setConfirmedRideDetails({
+        carname: ridedetails.service,
+        minsaway: ridedetails.minsaway,
+        ridefare: "$" + rideDuration,
+      });
+      setConfirmButtomEnabled(true)
+    } else {
+      setConfirmedRideDetails({
+        carname: "Not_Set",
+        minsaway: "Not_Set",
+        ridefare: "Not_Set"
+      })
+      setConfirmButtomEnabled(false)
+    }
+  }
   return (
     <Wrapper>
       <ButtonContainer>
@@ -76,10 +102,23 @@ const Confirm = () => {
         <RideSelector
           pickUpCoordinates={pickUpCoordinates}
           dropoffCoordinates={dropoffCoordinates}
+          onClick={getSelectedRideDetails.bind(this)}
         />
         {/* confirm button */}
         <ConfirmButtonContainer>
-          <ConfirmButton>Confirm</ConfirmButton>
+          {/* <ConfirmButton onClick={() => alert("your ride is "+ confirmedridedetails.minsaway + <br/> + 
+          'Car:'+ confirmedridedetails.carname + <br/> +
+          'Ride Fare:'+ confirmedridedetails.ridefare)}>
+            Confirm
+          </ConfirmButton> */}
+          <Popup
+            buttonTitle="Confirm"
+            confirmButtonEnabled={confirmButtonEnabled}
+          >
+            <div>{"Your ride is" + " " + confirmedridedetails.minsaway}</div>
+            <div>{"Car:" + " " + confirmedridedetails.carname}</div>
+            <div>{"Ride Fare:" + " " + confirmedridedetails.ridefare}</div>
+          </Popup>
         </ConfirmButtonContainer>
       </RidesContainer>
     </Wrapper>
@@ -92,7 +131,7 @@ export default Confirm;
 const Wrapper = tw.div`flex flex-col h-screen`; // add display flex, because map uses a  flex-1 value
 const RidesContainer = tw.div`flex flex-col flex-1 h-1/2`;
 const ConfirmButtonContainer = tw.div`border-t-2`;
-const ConfirmButton = tw.div`bg-black text-white my-4 mx-4 text-center py-4 text-xl`;
+// const ConfirmButton = tw.div`bg-black text-white my-4 mx-4 text-center py-4 text-xl`;
 const ButtonContainer = tw.div`rounded-full absolute z-10 top-4 left-4 bg-white shadow-md cursor-pointer`;
 const BackButton = tw.img`h-full object-contain`;
 

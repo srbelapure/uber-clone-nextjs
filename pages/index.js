@@ -8,10 +8,12 @@ import Map from "./components/Map";
 import { auth } from "../firebase";
 import { onAuthStateChanged,signOut } from "@firebase/auth";
 import { useRouter } from "next/router";
+import 'bootstrap/dist/css/bootstrap.css';
 
 
 export default function Home() {
   const [user, setUser] = useState(null);
+  const [showUserCurrentLocation, setShowUserCurrentLocation] = useState(false)
   const router = useRouter();
 
   useEffect(() => {
@@ -70,16 +72,28 @@ export default function Home() {
             />
             Wheels
           </ActionButton>
-          <ActionButton>
-            <ActionButtonImage
-              src="https://i.ibb.co/5RjchBg/uberschedule.png"
-              alt="Reserved image"
-            />
-            Reserved
-          </ActionButton>
+          <Link href="/reserve">
+            <ActionButton>
+              <ActionButtonImage
+                src="https://i.ibb.co/5RjchBg/uberschedule.png"
+                alt="Reserved image"
+              />
+              Reserved
+            </ActionButton>
+          </Link>
         </ActionButtons>
         {/* input button */}
-        <InputButton>Where to?</InputButton>
+        <Link 
+        // href="/search"
+        href={{
+          pathname: "/search",
+          query: {
+            showUserCurrentLocation: showUserCurrentLocation
+          },
+        }}
+        >
+          <InputButton onClick={()=>setShowUserCurrentLocation(true)}>Where to?</InputButton>
+        </Link>
       </ActionItems>
     </Wrapper>
   );

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect , useState} from "react";
 import tw from "tailwind-styled-components";
 import mapboxgl from "mapbox-gl";
 
@@ -7,6 +7,9 @@ mapboxgl.accessToken =
   "pk.eyJ1IjoiY29kZXIxOTk0IiwiYSI6ImNrdm12eHhhbzNpODQydm55M3RkYzQ0dnAifQ.4765hgdfnCSdO1LxiOYDdA";
 
 const Map = (props) => {
+  const [rideRouteMins, setRideRouteMins] = useState(0)
+  const [userLocationFromGeolocator, setUserLocationFromGeoLocator] = useState([])
+  
   useEffect(() => {
     const map = new mapboxgl.Map({
       container: "map_section",
@@ -31,7 +34,21 @@ const Map = (props) => {
       });
     }
 
-/**This MapboxGeocoder when called on map, it adds an input box with auto suggestions
+    // To Add geolocate control to the map.(to get user's current location)
+    map.addControl(
+      new mapboxgl.GeolocateControl({
+        positionOptions: {
+          enableHighAccuracy: true,
+        },
+        // When active the map will receive updates to the device's location as it changes.
+        trackUserLocation: true,
+        // Draw an arrow next to the location dot to indicate which direction the device is heading.
+        showUserHeading: true,
+      })
+    );
+
+
+    /**This MapboxGeocoder when called on map, it adds an input box with auto suggestions
  * import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 * do npm install for geocoder
@@ -56,7 +73,7 @@ import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
       // an arbitrary start will always be the same
       // only the end or destination will change
       const query = await fetch(
-        `https://api.mapbox.com/directions/v5/mapbox/${props.routemode}/${start[0]},${start[1]};${end[0]},${end[1]}?steps=true&geometries=geojson&access_token=${mapboxgl.accessToken}`,
+        `https://api.mapbox.com/directions/v5/mapbox/driving/${start[0]},${start[1]};${end[0]},${end[1]}?steps=true&geometries=geojson&access_token=${mapboxgl.accessToken}`,
         { method: "GET" }
       );
       const json = await query.json();
@@ -94,6 +111,25 @@ import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
           },
         });
       }
+
+      // //TO show route ride minutes
+      if (
+        props.pickUpCoordinates &&
+        props.pickUpCoordinates[0] !== 0 &&
+        props.pickUpCoordinates[1] !== 0 &&
+        props.dropoffCoordinates &&
+        props.dropoffCoordinates[0] !== 0 &&
+        props.dropoffCoordinates[1] !== 0
+      ) {
+        if (Math.round(data.duration / 60) > 59) {
+          setRideRouteMins(secondsToHms(data.duration));
+        } else {
+          var minsValue = Math.round(data.duration / 60);
+          minsValue > 1
+            ? setRideRouteMins(minsValue + " " + "mins")
+            : setRideRouteMins(minsValue + " " + "min");
+        }
+      }
     }
     if (
       props.pickUpCoordinates &&
@@ -127,7 +163,7 @@ import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
           },
           paint: {
             "circle-radius": 10,
-            "circle-color": "purple", //#3887be
+            "circle-color": "#3887be",
           },
         });
       });
@@ -177,7 +213,7 @@ import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
             },
             paint: {
               "circle-radius": 10,
-              "circle-color": "green", //#f30
+              "circle-color": "#3887be",
             },
           });
         }
@@ -193,11 +229,31 @@ import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
       .addTo(map);
   };
 
-  return <Wrapper id="map_section"></Wrapper>;
+  function secondsToHms(d) {
+    d = Number(d);
+    var h = Math.floor(d / 3600);
+    var m = Math.floor(d % 3600 / 60);
+    var s = Math.floor(d % 3600 % 60);
+
+    var hDisplay = h > 0 ? h + (h == 1 ? " hour, " : " hours, ") : "";
+    var mDisplay = m > 0 ? m + (m == 1 ? " minute, " : " minutes, ") : "";
+    var sDisplay = s > 0 ? s + (s == 1 ? " second" : " seconds") : "";
+    return hDisplay + mDisplay + sDisplay; 
+}
+
+  return (
+    <Wrapper id="map_section">
+      {rideRouteMins !== 0 && (
+        <RideRouteDuration>{rideRouteMins} {<br/>}to reach destination</RideRouteDuration>
+      )}
+    </Wrapper>
+  );
 };
 
 export default Map;
 
 const Wrapper = tw.div`flex-1`;
+const RideRouteDuration = tw.div`flex items-center bg-indigo-300 absolute
+z-10 m-20 text-center font-bold align-middle w-20`;
 
 // rafce rfce ----> ES7 react redux snippets
