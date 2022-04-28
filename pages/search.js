@@ -11,7 +11,7 @@ const Search = () => {
   // const [routemode, setRouteMode] = useState('')
   const [userLocation, setUserLocation] = useState('')
   const router = useRouter();
-
+ 
   const { showUserCurrentLocation} = router.query;
 
   const onClickPickupLocation =(selectedLocation)=>{
@@ -21,11 +21,6 @@ const Search = () => {
   const onClickDropOffLocation =(selectedDropoffLocation)=>{
     setDropoff(selectedDropoffLocation)
   }
-
-  useEffect(() => {
-    
-    
-  }, [])
 
   const getUsersCurrentLocation=()=>{
     var options = {
@@ -73,15 +68,16 @@ const Search = () => {
             title="Go to home page"
           />
         </Link>
-      {/* get auto location button */}
-      {/* <GetUserCurrentLocationContainer> */}
-        <GetUserCurrentLocation onClick={() => getUsersCurrentLocation()} title="Get current location">
+        {/* get auto location button */}
+        {/* <GetUserCurrentLocationContainer> */}
+        <GetUserCurrentLocation
+          onClick={() => getUsersCurrentLocation()}
+          title="Get current location"
+        >
           Get Current Location
         </GetUserCurrentLocation>
-      {/* </GetUserCurrentLocationContainer> */}
+        {/* </GetUserCurrentLocationContainer> */}
       </ButtonContainer>
-
-      
 
       {/* input container */}
       <InputContainer>
@@ -127,10 +123,6 @@ const Search = () => {
             inputValue={"dropoff"}
           />
         </InputBoxes>
-        <PlusIcon
-          src="https://img.icons8.com/ios/50/000000/plus-math.png"
-          alt="Plus icon"
-        />
       </InputContainer>
       {/* <GeoCoderInput onClick={onClick.bind(this)}/> */}
       {/* <RoutingProfilesInputContainer>
@@ -155,11 +147,18 @@ const Search = () => {
           query: {
             pickuplocation: pickup,
             dropofflocation: dropoff,
-            userLocation:userLocation ? userLocation :''
+            userLocation: userLocation ? userLocation : "",
           },
         }}
       >
-        <ConfirmButtonContainer>Confirm Location</ConfirmButtonContainer>
+        <ConfirmButtonContainer>
+          <ConfirmButton
+            className="confirm-pickup"
+            disabled={!((!!pickup || !!userLocation) && !!dropoff)}
+          >
+            Confirm Location
+          </ConfirmButton>
+        </ConfirmButtonContainer>
       </Link>
     </Wrapper>
   );
@@ -189,7 +188,8 @@ const PlusIcon = tw.img`w-10 h-10 bg-gray-200 rounded-full ml-3`;
 // const DrivingMode = tw.span`flex-1 active:bg-gray-300 hover:bg-gray-200 rounded-full m-1 text-center cursor-pointer`;
 // const WalkingMode = tw.span`flex-1 active:bg-gray-300 hover:bg-gray-200 rounded-full m-1 text-center cursor-pointer`;
 // const CyclingMode = tw.span`flex-1 active:bg-gray-300 hover:bg-gray-200 rounded-full m-1 text-center cursor-pointer`;
-const SavedPlaces = tw.div`flex items-center bg-white px-4 py-2`;
+const SavedPlaces = tw.div`flex items-center bg-white px-4 py-2 cursor-pointer`;
 const StarIcon = tw.img`bg-gray-400 w-10 h-10 p-2 rounded-full mr-2`;
-const ConfirmButtonContainer = tw.div`text-white bg-black text-center mt-2 mx-4 px-4 py-3
+const ConfirmButtonContainer = tw.div`flex items-center`;
+const ConfirmButton = tw.button`text-white w-100 bg-black text-center mt-2 mx-4 px-4 py-3
 text-2xl cursor-pointer`;
