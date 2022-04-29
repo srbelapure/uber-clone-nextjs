@@ -20,6 +20,9 @@ const Confirm = () => {
   const [confirmedridedetails, setConfirmedRideDetails] = useState([{
     carname:'',minsaway:'',ridefare:''
   }])
+  const [rideConfirm,setRideConfirm]=useState(false)
+  const [rideAtLocation,setRideAtLocation] = useState(false)
+  const [startRide,setStartRide]=useState(false)
 
   const getPickupCoordinates = (pickupLocationValue) => {
     const pickup = pickupLocationValue;
@@ -69,6 +72,7 @@ const Confirm = () => {
         carname: ridedetails.service,
         minsaway: ridedetails.minsaway,
         ridefare: "$" + rideDuration,
+        time:ridedetails.time
       });
       setConfirmButtomEnabled(true)
     } else {
@@ -80,6 +84,20 @@ const Confirm = () => {
       setConfirmButtomEnabled(false)
     }
   }
+
+  const onRideConfirm=()=>{
+    setRideConfirm(true)
+  }
+
+  const handlePropFromChild=(value)=>{
+console.log("valueeeeeeeeeeee_rideArrivedAtLocation",value)
+setRideAtLocation(value)
+  }
+
+  const onClickStartRide =()=>{
+    setStartRide(true)
+  }
+
   return (
     <Wrapper>
       <ButtonContainer>
@@ -95,6 +113,10 @@ const Confirm = () => {
         pickUpCoordinates={pickUpCoordinates}
         dropoffCoordinates={dropoffCoordinates}
         routemode={routemode}
+        rideConfirm={rideConfirm}
+        rideMinsAway={confirmedridedetails.time}
+        propFromChild={handlePropFromChild}
+        startRide={startRide}
       />
       {/* ride container */}
       <RidesContainer>
@@ -108,17 +130,20 @@ const Confirm = () => {
         <ConfirmButtonContainer>
           {/* <ConfirmButton onClick={() => alert("your ride is "+ confirmedridedetails.minsaway + <br/> + 
           'Car:'+ confirmedridedetails.carname + <br/> +
-          'Ride Fare:'+ confirmedridedetails.ridefare)}>
-            Confirm
-          </ConfirmButton> */}
-          <Popup
+          'Ride Fare:'+ confirmedridedetails.ridefare)}> */}
+          {rideAtLocation ? (
+            <ConfirmButton onClick={onClickStartRide}>Start Ride</ConfirmButton>
+          ) : (
+            <ConfirmButton onClick={onRideConfirm}>Confirm</ConfirmButton>
+          )}
+          {/* <Popup
             buttonTitle="Confirm"
             confirmButtonEnabled={confirmButtonEnabled}
           >
             <div>{"Your ride is" + " " + confirmedridedetails.minsaway}</div>
             <div>{"Car:" + " " + confirmedridedetails.carname}</div>
             <div>{"Ride Fare:" + " " + confirmedridedetails.ridefare}</div>
-          </Popup>
+          </Popup> */}
         </ConfirmButtonContainer>
       </RidesContainer>
     </Wrapper>
@@ -134,6 +159,7 @@ const ConfirmButtonContainer = tw.div`border-t-2`;
 // const ConfirmButton = tw.div`bg-black text-white my-4 mx-4 text-center py-4 text-xl`;
 const ButtonContainer = tw.div`rounded-full absolute z-10 top-4 left-4 bg-white shadow-md cursor-pointer`;
 const BackButton = tw.img`h-full object-contain`;
+const ConfirmButton = tw.button`bg-black text-white w-screen my-4 mx-4 text-center py-4 text-xl disabled:cursor-not-allowed`;
 
 // TO add pointers over map, search add markers to map in mapbox -> https://docs.mapbox.com/mapbox-gl-js/example/add-a-marker/  ---> refer addToMap() in Map.js
 

@@ -8,7 +8,8 @@ import Map from "./components/Map";
 import { auth } from "../firebase";
 import { onAuthStateChanged,signOut } from "@firebase/auth";
 import { useRouter } from "next/router";
-import 'bootstrap/dist/css/bootstrap.css';
+
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 export default function Home() {

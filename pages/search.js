@@ -1,6 +1,8 @@
 import React, { useState ,useEffect} from "react";
 import tw from "tailwind-styled-components";
 import Link from "next/link";
+import { getAuth } from "firebase/auth";
+import { db } from "../firebase";
 
 import GeoCoderInput from './components/GeoCoderInput'
 import { useRouter } from "next/router";
@@ -10,7 +12,22 @@ const Search = () => {
   const [dropoff, setDropoff] = useState("");
   // const [routemode, setRouteMode] = useState('')
   const [userLocation, setUserLocation] = useState('')
+  const [savedPlacelist,setSavedPlace]= useState([])
+  const [showPlacesList,setShowPlacesList] = useState(false)
+
+  useEffect(() => {
+    const unsubscribe=db.collection("savedplaces").onSnapshot((snapshot) => {
+      setSavedPlace(snapshot.docs.map((doc) => ({ id: doc.id, post: doc.data() })));
+    });
+    return () => {
+      unsubscribe()
+    };
+  }, [])
+  
+
   const router = useRouter();
+  let setSavedPlaceList=[]
+  let displaySavedPlacesList=[]
  
   const { showUserCurrentLocation} = router.query;
 
@@ -57,6 +74,49 @@ const Search = () => {
     var temp = navigator.geolocation.watchPosition(success, error, options);
   }
 
+  const onAddPickuptoList = () => {
+    if (pickup.trim() !== "") {
+      // setSavedPlace(savedPlace.concat(pickup))
+      setSavedPlaceList = [...setSavedPlaceList, pickup];
+    }
+    if (userLocation.trim() !== "") {
+      // setSavedPlace(savedPlace.concat(userLocation))
+      setSavedPlaceList = [...setSavedPlaceList, userLocation];
+    }
+    addToFirebaseDB();
+  };
+
+  const onAddDropofftoList = () => {
+    if (dropoff.trim() !== "") {
+      // setSavedPlace(savedPlace.concat(dropoff));
+      setSavedPlaceList = [...setSavedPlaceList, dropoff];
+    }
+    addToFirebaseDB();
+  };
+
+  const addToFirebaseDB = () => {
+    let list = setSavedPlaceList.filter((item, index) => {
+      return setSavedPlaceList.indexOf(item) == index;
+    });
+
+    db.collection("savedplaces").add({
+      placeslist: list,
+      userid: getAuth().currentUser.uid,
+    });
+  };
+
+  const onClickSavedPlaces=()=>{
+    setShowPlacesList(showPlacesList = !showPlacesList)
+  }
+
+  savedPlacelist.map((place) => {
+    if (place.post.userid === getAuth().currentUser.uid) {
+      let tempList = [...displaySavedPlacesList, ...place.post.placeslist];
+      displaySavedPlacesList = tempList.filter((item, index) => {
+        return tempList.indexOf(item) == index;
+      });
+    }
+  });
   return (
     <Wrapper>
       {/* button container */}
@@ -124,6 +184,14 @@ const Search = () => {
           />
         </InputBoxes>
       </InputContainer>
+      <AddLocationToSavedPlacesContainer>
+        <AddPickupLocationToSavedPlacesButton onClick={onAddPickuptoList}>
+          Add pickup to list
+        </AddPickupLocationToSavedPlacesButton>
+        <AddDropoffLocationToSavedPlacesButton onClick={onAddDropofftoList}>
+          Add dropoff to list
+        </AddDropoffLocationToSavedPlacesButton>
+      </AddLocationToSavedPlacesContainer>
       {/* <GeoCoderInput onClick={onClick.bind(this)}/> */}
       {/* <RoutingProfilesInputContainer>
         <TrafficMode onClick={()=>setRouteMode('driving-traffic')}>Traffic</TrafficMode>
@@ -133,13 +201,21 @@ const Search = () => {
       </RoutingProfilesInputContainer> */}
 
       {/* saved places */}
-      <SavedPlaces>
+      <SavedPlaces onClick={onClickSavedPlaces}>
         <StarIcon
           src="https://img.icons8.com/ios-filled/50/ffffff/star--v1.png"
           alt="Star icon"
         />{" "}
         Saved Places
       </SavedPlaces>
+      {showPlacesList && (
+        <SavedPlacesListContainer>
+          {displaySavedPlacesList.map((item) => {
+            return <SavedPlacesList onClick={(e)=>console.log("...",e.target.innerText)} key={item}>{item}</SavedPlacesList>;
+          })}
+        </SavedPlacesListContainer>
+      )}
+
       {/* confirm location */}
       <Link
         href={{
@@ -190,6 +266,11 @@ const PlusIcon = tw.img`w-10 h-10 bg-gray-200 rounded-full ml-3`;
 // const CyclingMode = tw.span`flex-1 active:bg-gray-300 hover:bg-gray-200 rounded-full m-1 text-center cursor-pointer`;
 const SavedPlaces = tw.div`flex items-center bg-white px-4 py-2 cursor-pointer`;
 const StarIcon = tw.img`bg-gray-400 w-10 h-10 p-2 rounded-full mr-2`;
-const ConfirmButtonContainer = tw.div`flex items-center`;
+const ConfirmButtonContainer = tw.div`flex items-center justify-center`;
 const ConfirmButton = tw.button`text-white w-100 bg-black text-center mt-2 mx-4 px-4 py-3
 text-2xl cursor-pointer`;
+const AddLocationToSavedPlacesContainer= tw.div`flex justify-center py-1`
+const AddPickupLocationToSavedPlacesButton= tw.button`p-2 w-30 mb-2 w-50 bg-white mx-2 py-1`
+const AddDropoffLocationToSavedPlacesButton= tw.button`p-2 w-30 mb-2 w-50 bg-white mx-2 py-1`
+const SavedPlacesListContainer= tw.div``
+const SavedPlacesList= tw.div`bg-white p-2 border-2 border-solid border-gray-200 my-1`
