@@ -10,19 +10,24 @@ import Popup from "./components/Modal";
 const Confirm = () => {
   const router = useRouter();
 
-  const { pickuplocation, dropofflocation , routemode,userLocation} = router.query;
+  const { pickuplocation, dropofflocation, routemode, userLocation } =
+    router.query;
 
   const [pickUpCoordinates, setPickupCoordinates] = useState([0, 0]);
   const [dropoffCoordinates, setDropoffCoordinates] = useState([0, 0]);
 
   const [showModal, setShowModal] = useState(false);
-  const [confirmButtonEnabled, setConfirmButtomEnabled] = useState(false)
-  const [confirmedridedetails, setConfirmedRideDetails] = useState([{
-    carname:'',minsaway:'',ridefare:''
-  }])
-  const [rideConfirm,setRideConfirm]=useState(false)
-  const [rideAtLocation,setRideAtLocation] = useState(false)
-  const [startRide,setStartRide]=useState(false)
+  const [confirmButtonEnabled, setConfirmButtomEnabled] = useState(false);
+  const [confirmedridedetails, setConfirmedRideDetails] = useState([
+    {
+      carname: "",
+      minsaway: "",
+      ridefare: "",
+    },
+  ]);
+  const [rideConfirm, setRideConfirm] = useState(false);
+  const [rideAtLocation, setRideAtLocation] = useState(false);
+  const [startRide, setStartRide] = useState(false);
 
   const getPickupCoordinates = (pickupLocationValue) => {
     const pickup = pickupLocationValue;
@@ -63,40 +68,40 @@ const Confirm = () => {
   useEffect(() => {
     getPickupCoordinates(pickuplocation ? pickuplocation : userLocation);
     getDropOffCoordinates(dropofflocation);
-  }, [pickuplocation, dropofflocation,userLocation]);
+  }, [pickuplocation, dropofflocation, userLocation]);
 
-  const getSelectedRideDetails=(ridedetails,rideduration)=>{
+  const getSelectedRideDetails = (ridedetails, rideduration) => {
     if (ridedetails && rideduration) {
       var rideDuration = (rideduration * ridedetails.multiplier).toFixed(2);
       setConfirmedRideDetails({
         carname: ridedetails.service,
         minsaway: ridedetails.minsaway,
         ridefare: "$" + rideDuration,
-        time:ridedetails.time
+        time: ridedetails.time,
       });
-      setConfirmButtomEnabled(true)
+      setConfirmButtomEnabled(true);
     } else {
       setConfirmedRideDetails({
         carname: "Not_Set",
         minsaway: "Not_Set",
-        ridefare: "Not_Set"
-      })
-      setConfirmButtomEnabled(false)
+        ridefare: "Not_Set",
+      });
+      setConfirmButtomEnabled(false);
     }
-  }
+  };
 
-  const onRideConfirm=()=>{
-    setRideConfirm(true)
-  }
+  const onRideConfirm = () => {
+    setRideConfirm(true);
+  };
 
-  const handlePropFromChild=(value)=>{
-console.log("valueeeeeeeeeeee_rideArrivedAtLocation",value)
-setRideAtLocation(value)
-  }
+  const handlePropFromChild = (value) => {
+    console.log("valueeeeeeeeeeee_rideArrivedAtLocation", value);
+    setRideAtLocation(value);
+  };
 
-  const onClickStartRide =()=>{
-    setStartRide(true)
-  }
+  const onClickStartRide = () => {
+    setStartRide(true);
+  };
 
   return (
     <Wrapper>
