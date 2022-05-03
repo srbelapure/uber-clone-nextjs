@@ -275,9 +275,6 @@ import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
     }
 
     if (props.startRide === true) {
-      //const toStartRide = true;
-      // debugger;
-      //showTimeLapse(0, 10, map, toStartRide);
       props.propForIsLoading(true);
     }
 

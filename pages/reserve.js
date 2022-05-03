@@ -1,7 +1,5 @@
 import React from "react";
 import tw from "tailwind-styled-components";
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-// import { faCalendar } from '@fortawesome/pro-solid-svg-icons'
 import Link from "next/link";
 
 const Reserve = () => {

@@ -12,7 +12,6 @@ import { useRouter } from "next/router";
 const Search = () => {
   const [pickup, setPickup] = useState("");
   const [dropoff, setDropoff] = useState("");
-  // const [routemode, setRouteMode] = useState('')
   const [userLocation, setUserLocation] = useState("");
   const [savedPlacelist, setSavedPlace] = useState([]);
   const [showPlacesList, setShowPlacesList] = useState(false);
@@ -72,21 +71,14 @@ const Search = () => {
       console.warn(`ERROR(${err.code}): ${err.message}`);
     }
 
-    // var temp = navigator.geolocation.getCurrentPosition(
-    //   success,
-    //   error,
-    //   options
-    // );
     var temp = navigator.geolocation.watchPosition(success, error, options);
   };
 
   const onAddPickuptoList = () => {
     if (pickup.trim() !== "") {
-      // setSavedPlace(savedPlace.concat(pickup))
       setSavedPlaceList = [...setSavedPlaceList, pickup];
     }
     if (userLocation.trim() !== "") {
-      // setSavedPlace(savedPlace.concat(userLocation))
       setSavedPlaceList = [...setSavedPlaceList, userLocation];
     }
     addToFirebaseDB();
@@ -94,7 +86,6 @@ const Search = () => {
 
   const onAddDropofftoList = () => {
     if (dropoff.trim() !== "") {
-      // setSavedPlace(savedPlace.concat(dropoff));
       setSavedPlaceList = [...setSavedPlaceList, dropoff];
     }
     addToFirebaseDB();

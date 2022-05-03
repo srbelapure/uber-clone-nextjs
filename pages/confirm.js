@@ -170,22 +170,11 @@ const Confirm = () => {
         />
         {/* confirm button */}
         <ConfirmButtonContainer>
-          {/* <ConfirmButton onClick={() => alert("your ride is "+ confirmedridedetails.minsaway + <br/> + 
-          'Car:'+ confirmedridedetails.carname + <br/> +
-          'Ride Fare:'+ confirmedridedetails.ridefare)}> */}
           {rideAtLocation ? (
             <ConfirmButton onClick={onClickStartRide}>Start Ride</ConfirmButton>
           ) : (
             <ConfirmButton onClick={onRideConfirm}>Confirm</ConfirmButton>
           )}
-          {/* <Popup
-            buttonTitle="Confirm"
-            confirmButtonEnabled={confirmButtonEnabled}
-          >
-            <div>{"Your ride is" + " " + confirmedridedetails.minsaway}</div>
-            <div>{"Car:" + " " + confirmedridedetails.carname}</div>
-            <div>{"Ride Fare:" + " " + confirmedridedetails.ridefare}</div>
-          </Popup> */}
         </ConfirmButtonContainer>
       </RidesContainer>
       {rideConfirm && (
@@ -215,7 +204,6 @@ const Confirm = () => {
         </div>
       )}
       {rideArrivedAtDestination && (
-        // <RideSuccessfulModal dropofflocation={dropofflocation}/>
         <RideSuccessfulModal moveToPageName={"Home"}>
           You have reached your destination{" "}
           {dropofflocation ? dropofflocation : ""}
@@ -231,7 +219,6 @@ export default Confirm;
 const Wrapper = tw.div`flex flex-col h-screen`; // add display flex, because map uses a  flex-1 value
 const RidesContainer = tw.div`flex flex-col flex-1 h-1/2`;
 const ConfirmButtonContainer = tw.div`border-t-2`;
-// const ConfirmButton = tw.div`bg-black text-white my-4 mx-4 text-center py-4 text-xl`;
 const ButtonContainer = tw.div`rounded-full absolute z-10 top-4 left-4 bg-white shadow-md cursor-pointer`;
 const BackButton = tw.img`h-full object-contain`;
 const ConfirmButton = tw.button`w-1/2 bg-black text-white w-screen my-4 text-center py-4 text-xl disabled:cursor-not-allowed`;
