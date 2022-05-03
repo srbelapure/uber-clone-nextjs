@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import tw from "tailwind-styled-components";
 import mapboxgl from "mapbox-gl";
 import { DotLoader } from "react-spinners";
+import RideSuccessfulModal from './BootstrapModal'
 
 mapboxgl.accessToken =
   "pk.eyJ1IjoiY29kZXIxOTk0IiwiYSI6ImNrdm12eHhhbzNpODQydm55M3RkYzQ0dnAifQ.4765hgdfnCSdO1LxiOYDdA";
@@ -15,10 +16,9 @@ const Map = (props) => {
   const [rideArrivedAtLocation, setRideArrivedAtLocation] = useState(false);
   const [rideArrivedAtDestination, setRideArrivedAtDestination] =
     useState(false);
-  const [isLoadingForDropoff, setIsLoadingForDropoff] = useState(false);
-  const [isLoadingForPickup, setIsLoadingForPickup] = useState(false);
 
   useEffect(() => {
+    clearInterval(timerId)
     const map = new mapboxgl.Map({
       container: "map_section",
       // style: "mapbox://styles/mapbox/streets-v11", // this was the default style for map
@@ -28,7 +28,7 @@ const Map = (props) => {
     });
 
     //to add the pickup point on the map
-    if (props.pickUpCoordinates) {
+    if (props.pickUpCoordinates && rideArrivedAtDestination === false) {
       addToMap(map, props.pickUpCoordinates);
     }
     //to add the drop-off point on the map
@@ -72,7 +72,6 @@ import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 
     //Below is the code used to add a route line between sourec and destination
     // start has pickup coordinates and end has dropoff coordinates
-
     const start = props.pickUpCoordinates;
     // create a function to make a directions request
     async function getRoute(end) {
@@ -126,7 +125,7 @@ import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
         props.pickUpCoordinates[1] !== 0 &&
         props.dropoffCoordinates &&
         props.dropoffCoordinates[0] !== 0 &&
-        props.dropoffCoordinates[1] !== 0
+        props.dropoffCoordinates[1] !== 0 && rideArrivedAtDestination===false
       ) {
         if (Math.round(data.duration / 60) > 59) {
           setRideRouteMins(secondsToHms(data.duration));
@@ -138,6 +137,7 @@ import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
         }
       }
     }
+
     if (
       props.pickUpCoordinates &&
       props.pickUpCoordinates[0] !== 0 &&
@@ -237,7 +237,7 @@ import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
     ) {
       let rideReachTime = props.rideMinsAway * 10;
       showTimeLapse(0, rideReachTime);
-      setIsLoadingForPickup(true);
+      props.propForIsLoading(true)
     }
 
     if (rideArrivedAtLocation === true && props.startRide === false) {
@@ -269,60 +269,47 @@ import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
         });
       });
       props.propFromChild(rideArrivedAtLocation);
-      setIsLoadingForPickup(false);
+      props.propForIsLoading(false)
+      clearInterval(timerId)
     }
 
     if (props.startRide === true) {
-      const toStartRide = true;
-      showTimeLapse(0, 10, map, toStartRide);
-      setIsLoadingForDropoff(true);
+      //const toStartRide = true;
+      // debugger;
+      //showTimeLapse(0, 10, map, toStartRide);
+      props.propForIsLoading(true)
     }
 
     if (rideArrivedAtDestination === true) {
       map.on("load", () => {
-        const end = {
-          type: "FeatureCollection",
-          features: [
-            {
-              type: "Feature",
-              properties: {},
-              geometry: {
-                type: "Point",
-                coordinates: props.dropoffCoordinates,
-              },
-            },
-          ],
-        };
-        if (map.getLayer("end")) {
-          map.getSource("end").setData(end);
-        } else {
-          map.addLayer({
-            id: "end",
-            type: "circle",
-            source: {
-              type: "geojson",
-              data: {
-                type: "FeatureCollection",
-                features: [
-                  {
-                    type: "Feature",
-                    properties: {},
-                    geometry: {
-                      type: "Point",
-                      coordinates: props.dropoffCoordinates,
-                    },
+        // Add starting point to the map
+        map.addLayer({
+          id: "point",
+          type: "circle",
+          source: {
+            type: "geojson",
+            data: {
+              type: "FeatureCollection",
+              features: [
+                {
+                  type: "Feature",
+                  properties: {},
+                  geometry: {
+                    type: "Point",
+                    coordinates: props.dropoffCoordinates,
                   },
-                ],
-              },
+                },
+              ],
             },
-            paint: {
-              "circle-radius": 20,
-              "circle-color": "green",
-            },
-          });
-        }
+          },
+          paint: {
+            "circle-radius": 20,
+            "circle-color": "green",
+          },
+        });
       });
-      setIsLoadingForDropoff(false);
+      props.propForIsLoading(false)
+      clearInterval(timerId)
     }
   }, [
     props.pickUpCoordinates,
@@ -344,6 +331,8 @@ import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
   //   }
   // }, [props.rideConfirm]);
 
+  let timerId;
+
   const addToMap = (map, coordinate) => {
     // Create a default Marker and add it to the map.
     const marker1 = new mapboxgl.Marker().setLngLat(coordinate).addTo(map);
@@ -364,15 +353,15 @@ import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
   function showTimeLapse(from, to, map, toStartRide) {
     let current = 0;
 
-    let timerId = setInterval(function () {
-      console.log(current);
+    timerId = setInterval(function () {
+      props.rideWillReachInTime(current)
       if (current == to) {
         setRideArrivedAtLocation(true);
         if (toStartRide === true) {
           setRideArrivedAtDestination(true);
         }
         clearInterval(timerId);
-        alert("ride is here");
+        alert("Your ride is here...");
       }
       current++;
     }, 1000);
@@ -380,21 +369,15 @@ import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 
   return (
     <Wrapper id="map_section">
-      {rideRouteMins !== 0 && (
-        <RideRouteDuration>
-          {rideRouteMins} {<br />}to reach destination
-        </RideRouteDuration>
-      )}
-      {
-        <div>
-          <DotLoader
-            loading={isLoadingForPickup || isLoadingForDropoff}
-            size={80}
-            sizeUnit={"px"}
-            color="pink"
-          />
-        </div>
-      }
+      {rideRouteMins !== 0 ? (
+        <>
+          {rideRouteMins !== 0 && rideArrivedAtDestination === false && (
+            <RideRouteDuration>
+              {rideRouteMins} {<br />}to reach destination
+            </RideRouteDuration>
+          )}
+        </>
+      ) : <div></div>}
     </Wrapper>
   );
 };

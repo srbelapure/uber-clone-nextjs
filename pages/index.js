@@ -9,8 +9,6 @@ import { auth } from "../firebase";
 import { onAuthStateChanged,signOut } from "@firebase/auth";
 import { useRouter } from "next/router";
 
-import 'bootstrap/dist/css/bootstrap.min.css';
-
 
 export default function Home() {
   const [user, setUser] = useState(null);
@@ -87,10 +85,7 @@ export default function Home() {
         <Link 
         // href="/search"
         href={{
-          pathname: "/search",
-          query: {
-            showUserCurrentLocation: showUserCurrentLocation
-          },
+          pathname: "/search"
         }}
         >
           <InputButton onClick={()=>setShowUserCurrentLocation(true)}>Where to?</InputButton>

@@ -11,11 +11,18 @@ const Login = () => {
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
+      console.log("user",user)
       if (user) {
         router.push("/");
       }
     });
   }, []);
+
+  const onClickSignInWithGOogle=()=>{
+    signInWithPopup(auth, provider)
+    .then(result=>console.log(result))
+    .catch(error=>console.log(error))
+  }
 
   return (
     <Wrapper>
@@ -25,7 +32,7 @@ const Login = () => {
         src="https://i.ibb.co/CsV9RYZ/login-image.png"
         alt="Head Image for Uber"
       />
-      <SignInButton onClick={() => signInWithPopup(auth, provider)}>
+      <SignInButton onClick={onClickSignInWithGOogle}>
         Sign In With Google
       </SignInButton>
     </Wrapper>

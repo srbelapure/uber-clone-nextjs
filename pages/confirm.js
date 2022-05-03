@@ -5,7 +5,7 @@ import Link from "next/link";
 
 import Map from "./components/Map";
 import RideSelector from "./components/RideSelector";
-import Popup from "./components/Modal";
+import RideSuccessfulModal from './components/BootstrapModal'
 
 const Confirm = () => {
   const router = useRouter();
@@ -28,6 +28,13 @@ const Confirm = () => {
   const [rideConfirm, setRideConfirm] = useState(false);
   const [rideAtLocation, setRideAtLocation] = useState(false);
   const [startRide, setStartRide] = useState(false);
+  const [isLoading,setIsLoading] = useState(false)
+  const [progress,setProgress] = useState(0)
+  const [rideReachTime,setRideReachTime] = useState(0)
+  const [destinationReachTime,setDestinationReachTime] = useState(0)
+  const [rideArrivedAtDestination, setRideArrivedAtDestination] = useState(false);
+
+  let progressInterval
 
   const getPickupCoordinates = (pickupLocationValue) => {
     const pickup = pickupLocationValue;
@@ -70,6 +77,43 @@ const Confirm = () => {
     getDropOffCoordinates(dropofflocation);
   }, [pickuplocation, dropofflocation, userLocation]);
 
+
+  useEffect(() => {
+    if (startRide === true) {
+      progressInterval = setInterval(() => {
+        setProgress((oldProgressValue) => {
+          const newProgressValue = oldProgressValue + 10;
+          console.log("newProgressValue",newProgressValue)
+          setDestinationReachTime(newProgressValue/10)
+          if (newProgressValue === 100) {
+            setRideArrivedAtDestination(true)
+            clearInterval(progressInterval);
+          }
+          return newProgressValue;
+        });
+      }, 1000);
+    }
+    else{
+      clearInterval(progressInterval);
+    }
+
+    // let current = 0;
+
+    // timerId = setInterval(function () {
+    //   console.log(current);
+    //   if (current == 10) {
+    //     setRideArrivedAtLocation(true);
+    //     if (toStartRide === true) {
+    //       setRideArrivedAtDestination(true);
+    //     }
+    //     clearInterval(timerId);
+    //   }
+    //   current++;
+    // }, 1000);
+
+  }, [startRide])
+  
+
   const getSelectedRideDetails = (ridedetails, rideduration) => {
     if (ridedetails && rideduration) {
       var rideDuration = (rideduration * ridedetails.multiplier).toFixed(2);
@@ -95,13 +139,23 @@ const Confirm = () => {
   };
 
   const handlePropFromChild = (value) => {
-    console.log("valueeeeeeeeeeee_rideArrivedAtLocation", value);
     setRideAtLocation(value);
+    setRideConfirm(false)
   };
 
   const onClickStartRide = () => {
     setStartRide(true);
   };
+
+  const handleIsLoadingProp=(value)=>{
+    setIsLoading(value)
+  }
+
+  const rideReachInTime=(value)=>{
+    setRideReachTime(value)
+  }
+
+  // console.log("_____ON_destinationReachTime",destinationReachTime)
 
   return (
     <Wrapper>
@@ -122,6 +176,10 @@ const Confirm = () => {
         rideMinsAway={confirmedridedetails.time}
         propFromChild={handlePropFromChild}
         startRide={startRide}
+        propForIsLoading={handleIsLoadingProp}
+        dropofflocation={dropofflocation}
+        rideWillReachInTime={rideReachInTime}
+        pickuplocation={pickuplocation}
       />
       {/* ride container */}
       <RidesContainer>
@@ -151,6 +209,39 @@ const Confirm = () => {
           </Popup> */}
         </ConfirmButtonContainer>
       </RidesContainer>
+      {rideConfirm && (
+        <div className="overlay-for-loading">
+          <div className="loader-component">
+            <div className="sub-loader-component">
+              Your ride is on the way
+              <br />
+              Will reach in {10 - rideReachTime} seconds
+            </div>
+          </div>
+        </div>
+       )}
+      {startRide && rideArrivedAtDestination===false && (
+        <div className="overlay-for-loading">
+          <div className="destination-progress">
+            <progress
+              className="ride-reach-destination-progress"
+              max={100}
+              value={progress}
+            />
+            <span className="destination-time">
+              You will reach the destination in {10 - destinationReachTime}{" "}
+              seconds{" "}
+            </span>
+          </div>
+        </div>
+      )}
+      { rideArrivedAtDestination &&
+        // <RideSuccessfulModal dropofflocation={dropofflocation}/>
+        <RideSuccessfulModal moveToPageName={"Home"}>
+          You have reached your destination{" "}
+            {dropofflocation ? dropofflocation : ""}
+        </RideSuccessfulModal>
+      }
     </Wrapper>
   );
 };
@@ -164,7 +255,8 @@ const ConfirmButtonContainer = tw.div`border-t-2`;
 // const ConfirmButton = tw.div`bg-black text-white my-4 mx-4 text-center py-4 text-xl`;
 const ButtonContainer = tw.div`rounded-full absolute z-10 top-4 left-4 bg-white shadow-md cursor-pointer`;
 const BackButton = tw.img`h-full object-contain`;
-const ConfirmButton = tw.button`bg-black text-white w-screen my-4 mx-4 text-center py-4 text-xl disabled:cursor-not-allowed`;
+const ConfirmButton = tw.button`w-1/2 bg-black text-white w-screen my-4 text-center py-4 text-xl disabled:cursor-not-allowed`;
+const LoaderContainer = tw.div`bg-green-300 px-6 py-6 position-relative bottom-20`
 
 // TO add pointers over map, search add markers to map in mapbox -> https://docs.mapbox.com/mapbox-gl-js/example/add-a-marker/  ---> refer addToMap() in Map.js
 

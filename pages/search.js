@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import tw from "tailwind-styled-components";
+import { faTrash } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Link from "next/link";
 import { getAuth } from "firebase/auth";
 import { db } from "../firebase";
@@ -29,6 +31,7 @@ const Search = () => {
   const router = useRouter();
   let setSavedPlaceList = [];
   let displaySavedPlacesList = [];
+  let tempList=[]
 
   const { showUserCurrentLocation } = router.query;
 
@@ -78,6 +81,7 @@ const Search = () => {
   };
 
   const onAddPickuptoList = () => {
+    console.log("*********",pickup,userLocation)
     if (pickup.trim() !== "") {
       // setSavedPlace(savedPlace.concat(pickup))
       setSavedPlaceList = [...setSavedPlaceList, pickup];
@@ -114,12 +118,48 @@ const Search = () => {
 
   savedPlacelist.map((place) => {
     if (place.post.userid === getAuth().currentUser.uid) {
-      let tempList = [...displaySavedPlacesList, ...place.post.placeslist];
-      displaySavedPlacesList = tempList.filter((item, index) => {
-        return tempList.indexOf(item) == index;
-      });
+      tempList = [...tempList,{
+        id: place.id,
+        post:{
+          placeslist:[...place.post.placeslist],
+          userid:place.post.userid
+        }
+      }]
+
+      displaySavedPlacesList = [
+        ...new Map(tempList.map((item) => [item["post"].placeslist[0], item])).values(),
+    ];
     }
   });
+
+  const onDeleteClick=(data)=>{
+    console.log("data",data)
+    console.log("savedPlacelist",savedPlacelist)
+    let idForDeletingPlacesFromDB=[]
+    savedPlacelist.map((item)=>{
+      item.post.placeslist.map((placeName)=>{
+        data.post.placeslist.map((dataVal)=>{
+          if(dataVal === placeName){
+            console.log("item.id",item.id)
+             return idForDeletingPlacesFromDB = [...idForDeletingPlacesFromDB,item.id]
+          }
+        })
+      })
+    })
+    console.log("idForDeletingPlacesFromDB",idForDeletingPlacesFromDB)
+    idForDeletingPlacesFromDB.map((entryId)=>{
+      db.collection("savedplaces").doc(entryId).delete();
+    })
+  }
+
+  const onTypePickupLocation=(e)=>{
+    setUserLocation("")
+    setPickup(e.target.value)
+  }
+
+  const onClickSavedPlace =(e)=>{
+  }
+
   return (
     <Wrapper>
       {/* button container */}
@@ -168,7 +208,7 @@ const Search = () => {
           <GeoCoderInput
             onClick={onClickPickupLocation.bind(this)}
             pickup={pickup || userLocation}
-            onChange={(e) => setPickup(e.target.value)}
+            onChange={(e) => onTypePickupLocation(e)}
             placeholder="Enter pickup location"
             inputValue={"pickup"}
           />
@@ -213,15 +253,22 @@ const Search = () => {
       </SavedPlaces>
       {showPlacesList && (
         <SavedPlacesListContainer>
-          {displaySavedPlacesList.map((item) => {
-            return (
-              <SavedPlacesList
-                onClick={(e) => console.log("...", e.target.innerText)}
-                key={item}
-              >
-                {item}
-              </SavedPlacesList>
-            );
+          {displaySavedPlacesList.map((item,index) => {
+            return(
+              item.post.placeslist.map((placeName,index)=>{
+                return (
+                  <Fragment key={index}>
+                  <SavedPlacesList
+                    onClick={(e) => onClickSavedPlace(e)}
+                    key={index}
+                  >
+                    {placeName}
+                    <FontAwesomeIcon icon={faTrash} style={{color:'rgb(79 83 86)',cursor:"pointer"}} onClick={()=>onDeleteClick(item)}/>
+                  </SavedPlacesList>
+                  </Fragment>
+                );
+              })
+            )
           })}
         </SavedPlacesListContainer>
       )}
@@ -283,4 +330,4 @@ const AddLocationToSavedPlacesContainer = tw.div`flex justify-center py-1`;
 const AddPickupLocationToSavedPlacesButton = tw.button`p-2 w-30 mb-2 w-50 bg-white mx-2 py-1`;
 const AddDropoffLocationToSavedPlacesButton = tw.button`p-2 w-30 mb-2 w-50 bg-white mx-2 py-1`;
 const SavedPlacesListContainer = tw.div``;
-const SavedPlacesList = tw.div`bg-white p-2 border-2 border-solid border-gray-200 my-1`;
+const SavedPlacesList = tw.div`flex items-center justify-between bg-white p-2 border-2 border-solid border-gray-200 my-1`;
