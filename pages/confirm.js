@@ -83,7 +83,6 @@ const Confirm = () => {
       progressInterval = setInterval(() => {
         setProgress((oldProgressValue) => {
           const newProgressValue = oldProgressValue + 10;
-          console.log("newProgressValue", newProgressValue);
           setDestinationReachTime(newProgressValue / 10);
           if (newProgressValue === 100) {
             setRideArrivedAtDestination(true);
@@ -95,20 +94,6 @@ const Confirm = () => {
     } else {
       clearInterval(progressInterval);
     }
-
-    // let current = 0;
-
-    // timerId = setInterval(function () {
-    //   console.log(current);
-    //   if (current == 10) {
-    //     setRideArrivedAtLocation(true);
-    //     if (toStartRide === true) {
-    //       setRideArrivedAtDestination(true);
-    //     }
-    //     clearInterval(timerId);
-    //   }
-    //   current++;
-    // }, 1000);
   }, [startRide]);
 
   const getSelectedRideDetails = (ridedetails, rideduration) => {

@@ -321,17 +321,6 @@ import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
     props.startRide,
   ]);
 
-  // useEffect(() => {
-  //   /**
-  //    * when user selects a ride and clicks confirm, then after a certain time lapse, we tell user that the ride has arrived
-  //    */
-  //   if(props.rideConfirm){
-  //     let rideReachTime=(props.rideMinsAway*10)
-  //     console.log("rideReachTime",rideReachTime,props.rideMinsAway)
-  //     showTimeLapse(0, rideReachTime);
-  //   }
-  // }, [props.rideConfirm]);
-
   let timerId;
 
   const addToMap = (map, coordinate) => {
