@@ -7,7 +7,7 @@ import Link from "next/link";
 const Reserve = () => {
   return (
     <Wrapper>
-        <ButtonContainer>
+      <ButtonContainer>
         <Link href="/">
           <BackButton
             src="https://img.icons8.com/ios-filled/50/000000/left.png"
@@ -16,9 +16,10 @@ const Reserve = () => {
         </Link>
       </ButtonContainer>
       <TopPart>
-          <TopImage
+        <TopImage
           src="https://static.vecteezy.com/system/resources/thumbnails/003/355/639/small/calendar-and-clock-icon-concept-of-schedule-appointment-free-vector.jpg"
-          alt="Uber Reserbed"/>
+          alt="Uber Reserbed"
+        />
       </TopPart>
       <BottomPart>
         <BottomPartLine1>Uber Reserve</BottomPartLine1>

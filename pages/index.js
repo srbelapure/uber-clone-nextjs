@@ -1,4 +1,4 @@
-import React,{useEffect,useState} from "react";
+import React, { useEffect, useState } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import tw from "tailwind-styled-components";
@@ -6,13 +6,12 @@ import Link from "next/link";
 
 import Map from "./components/Map";
 import { auth } from "../firebase";
-import { onAuthStateChanged,signOut } from "@firebase/auth";
+import { onAuthStateChanged, signOut } from "@firebase/auth";
 import { useRouter } from "next/router";
-
 
 export default function Home() {
   const [user, setUser] = useState(null);
-  const [showUserCurrentLocation, setShowUserCurrentLocation] = useState(false)
+  const [showUserCurrentLocation, setShowUserCurrentLocation] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -20,12 +19,11 @@ export default function Home() {
       if (user) {
         setUser({
           name: user.displayName,
-          photourl: user.photoUrl
+          photourl: user.photoUrl,
         });
-      }
-      else{
-        setUser(null)
-        router.push("/login")
+      } else {
+        setUser(null);
+        router.push("/login");
       }
     });
   }, []);
@@ -82,13 +80,15 @@ export default function Home() {
           </Link>
         </ActionButtons>
         {/* input button */}
-        <Link 
-        // href="/search"
-        href={{
-          pathname: "/search"
-        }}
+        <Link
+          // href="/search"
+          href={{
+            pathname: "/search",
+          }}
         >
-          <InputButton onClick={()=>setShowUserCurrentLocation(true)}>Where to?</InputButton>
+          <InputButton onClick={() => setShowUserCurrentLocation(true)}>
+            Where to?
+          </InputButton>
         </Link>
       </ActionItems>
     </Wrapper>

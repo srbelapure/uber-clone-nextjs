@@ -5,12 +5,12 @@
   flex-direction: column;
 }
 
-.map{
-flex: 1;
+.map {
+  flex: 1;
 }
 
-.start{
-flex: 1;
+.start {
+  flex: 1;
 }
 
 .main {

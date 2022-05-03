@@ -6,7 +6,7 @@ const GeoCoderInput = (props) => {
     results: [],
     loading: false,
     searchTime: new Date(),
-    showResults:true
+    showResults: true,
   });
 
   const onInput = (e) => {
@@ -15,7 +15,7 @@ const GeoCoderInput = (props) => {
     if (value === "") {
       setOptionsState({
         results: [],
-        loading: false
+        loading: false,
       });
     } else {
       search(
@@ -30,8 +30,8 @@ const GeoCoderInput = (props) => {
       );
     }
     setOptionsState({
-        showResults:true
-    })
+      showResults: true,
+    });
   };
 
   const search = (
@@ -57,7 +57,6 @@ const GeoCoderInput = (props) => {
       (proximity ? "&proximity=" + proximity : "") +
       (bbox ? "&bbox=" + bbox : "") +
       (types ? "&types=" + encodeURIComponent(types) : "");
-
 
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function (e) {
@@ -89,22 +88,22 @@ const GeoCoderInput = (props) => {
     }
   };
 
-  const onClickMethodForLocation=(selectedLocationName)=>{
-    props.onClick(selectedLocationName)
+  const onClickMethodForLocation = (selectedLocationName) => {
+    props.onClick(selectedLocationName);
     setOptionsState({
-      showResults:false
+      showResults: false,
     });
-  }
+  };
 
   return (
     <Wrapper>
       {/* {input} */}
       <InputBoxLocation
-      type="text"
-      placeholder={props.placeholder}
-      value={props.inputValue === 'pickup' ? props.pickup : props.dropoff}
-      onInput={onInput}
-      onChange={props.onChange}
+        type="text"
+        placeholder={props.placeholder}
+        value={props.inputValue === "pickup" ? props.pickup : props.dropoff}
+        onInput={onInput}
+        onChange={props.onChange}
       />
 
       {optionsstate.results &&
@@ -113,14 +112,11 @@ const GeoCoderInput = (props) => {
           <UnorderedList className={optionsstate.loading ? "loading" : ""}>
             {optionsstate.results.features.map((result, index) => {
               return (
-                <UnorderedListSubElement 
-                key={result.id}
-                onClick={() => onClickMethodForLocation(result.place_name)}
+                <UnorderedListSubElement
+                  key={result.id}
+                  onClick={() => onClickMethodForLocation(result.place_name)}
                 >
-                  <UnorderedListItem
-                    href="#"
-                    key={result.id}
-                  >
+                  <UnorderedListItem href="#" key={result.id}>
                     {result.place_name}
                   </UnorderedListItem>
                 </UnorderedListSubElement>

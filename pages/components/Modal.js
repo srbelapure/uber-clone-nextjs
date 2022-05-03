@@ -71,33 +71,7 @@
 //   background-color: rgba(0, 0, 0, 0.5);
 // `;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-import React,{useState} from "react";
+import React, { useState } from "react";
 
 // reactstrap components
 import { Button, Modal, ModalBody, ModalFooter } from "reactstrap";
@@ -111,7 +85,7 @@ function Popup(props) {
       <ConfirmButton
         type="button"
         onClick={() => setModalOpen(!modalOpen)}
-        disabled= {props.confirmButtonEnabled===false? true: false}
+        disabled={props.confirmButtonEnabled === false ? true : false}
       >
         {props.buttonTitle}
       </ConfirmButton>
@@ -148,6 +122,5 @@ function Popup(props) {
 }
 
 export default Popup;
-
 
 const ConfirmButton = tw.button`bg-black text-white w-screen my-4 mx-4 text-center py-4 text-xl disabled:cursor-not-allowed`;

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import tw from "tailwind-styled-components";
 import mapboxgl from "mapbox-gl";
 import { DotLoader } from "react-spinners";
-import RideSuccessfulModal from './BootstrapModal'
+import RideSuccessfulModal from "./BootstrapModal";
 
 mapboxgl.accessToken =
   "pk.eyJ1IjoiY29kZXIxOTk0IiwiYSI6ImNrdm12eHhhbzNpODQydm55M3RkYzQ0dnAifQ.4765hgdfnCSdO1LxiOYDdA";
@@ -18,7 +18,7 @@ const Map = (props) => {
     useState(false);
 
   useEffect(() => {
-    clearInterval(timerId)
+    clearInterval(timerId);
     const map = new mapboxgl.Map({
       container: "map_section",
       // style: "mapbox://styles/mapbox/streets-v11", // this was the default style for map
@@ -125,7 +125,8 @@ import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
         props.pickUpCoordinates[1] !== 0 &&
         props.dropoffCoordinates &&
         props.dropoffCoordinates[0] !== 0 &&
-        props.dropoffCoordinates[1] !== 0 && rideArrivedAtDestination===false
+        props.dropoffCoordinates[1] !== 0 &&
+        rideArrivedAtDestination === false
       ) {
         if (Math.round(data.duration / 60) > 59) {
           setRideRouteMins(secondsToHms(data.duration));
@@ -237,7 +238,7 @@ import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
     ) {
       let rideReachTime = props.rideMinsAway * 10;
       showTimeLapse(0, rideReachTime);
-      props.propForIsLoading(true)
+      props.propForIsLoading(true);
     }
 
     if (rideArrivedAtLocation === true && props.startRide === false) {
@@ -269,15 +270,15 @@ import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
         });
       });
       props.propFromChild(rideArrivedAtLocation);
-      props.propForIsLoading(false)
-      clearInterval(timerId)
+      props.propForIsLoading(false);
+      clearInterval(timerId);
     }
 
     if (props.startRide === true) {
       //const toStartRide = true;
       // debugger;
       //showTimeLapse(0, 10, map, toStartRide);
-      props.propForIsLoading(true)
+      props.propForIsLoading(true);
     }
 
     if (rideArrivedAtDestination === true) {
@@ -308,8 +309,8 @@ import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
           },
         });
       });
-      props.propForIsLoading(false)
-      clearInterval(timerId)
+      props.propForIsLoading(false);
+      clearInterval(timerId);
     }
   }, [
     props.pickUpCoordinates,
@@ -354,7 +355,7 @@ import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
     let current = 0;
 
     timerId = setInterval(function () {
-      props.rideWillReachInTime(current)
+      props.rideWillReachInTime(current);
       if (current == to) {
         setRideArrivedAtLocation(true);
         if (toStartRide === true) {
@@ -377,7 +378,9 @@ import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
             </RideRouteDuration>
           )}
         </>
-      ) : <div></div>}
+      ) : (
+        <div></div>
+      )}
     </Wrapper>
   );
 };

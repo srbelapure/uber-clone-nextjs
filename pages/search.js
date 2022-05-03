@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Fragment } from "react";
 import tw from "tailwind-styled-components";
-import { faTrash } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import { getAuth } from "firebase/auth";
 import { db } from "../firebase";
@@ -31,7 +31,7 @@ const Search = () => {
   const router = useRouter();
   let setSavedPlaceList = [];
   let displaySavedPlacesList = [];
-  let tempList=[]
+  let tempList = [];
 
   const { showUserCurrentLocation } = router.query;
 
@@ -81,7 +81,7 @@ const Search = () => {
   };
 
   const onAddPickuptoList = () => {
-    console.log("*********",pickup,userLocation)
+    console.log("*********", pickup, userLocation);
     if (pickup.trim() !== "") {
       // setSavedPlace(savedPlace.concat(pickup))
       setSavedPlaceList = [...setSavedPlaceList, pickup];
@@ -118,47 +118,54 @@ const Search = () => {
 
   savedPlacelist.map((place) => {
     if (place.post.userid === getAuth().currentUser.uid) {
-      tempList = [...tempList,{
-        id: place.id,
-        post:{
-          placeslist:[...place.post.placeslist],
-          userid:place.post.userid
-        }
-      }]
+      tempList = [
+        ...tempList,
+        {
+          id: place.id,
+          post: {
+            placeslist: [...place.post.placeslist],
+            userid: place.post.userid,
+          },
+        },
+      ];
 
       displaySavedPlacesList = [
-        ...new Map(tempList.map((item) => [item["post"].placeslist[0], item])).values(),
-    ];
+        ...new Map(
+          tempList.map((item) => [item["post"].placeslist[0], item])
+        ).values(),
+      ];
     }
   });
 
-  const onDeleteClick=(data)=>{
-    console.log("data",data)
-    console.log("savedPlacelist",savedPlacelist)
-    let idForDeletingPlacesFromDB=[]
-    savedPlacelist.map((item)=>{
-      item.post.placeslist.map((placeName)=>{
-        data.post.placeslist.map((dataVal)=>{
-          if(dataVal === placeName){
-            console.log("item.id",item.id)
-             return idForDeletingPlacesFromDB = [...idForDeletingPlacesFromDB,item.id]
+  const onDeleteClick = (data) => {
+    console.log("data", data);
+    console.log("savedPlacelist", savedPlacelist);
+    let idForDeletingPlacesFromDB = [];
+    savedPlacelist.map((item) => {
+      item.post.placeslist.map((placeName) => {
+        data.post.placeslist.map((dataVal) => {
+          if (dataVal === placeName) {
+            console.log("item.id", item.id);
+            return (idForDeletingPlacesFromDB = [
+              ...idForDeletingPlacesFromDB,
+              item.id,
+            ]);
           }
-        })
-      })
-    })
-    console.log("idForDeletingPlacesFromDB",idForDeletingPlacesFromDB)
-    idForDeletingPlacesFromDB.map((entryId)=>{
+        });
+      });
+    });
+    console.log("idForDeletingPlacesFromDB", idForDeletingPlacesFromDB);
+    idForDeletingPlacesFromDB.map((entryId) => {
       db.collection("savedplaces").doc(entryId).delete();
-    })
-  }
+    });
+  };
 
-  const onTypePickupLocation=(e)=>{
-    setUserLocation("")
-    setPickup(e.target.value)
-  }
+  const onTypePickupLocation = (e) => {
+    setUserLocation("");
+    setPickup(e.target.value);
+  };
 
-  const onClickSavedPlace =(e)=>{
-  }
+  const onClickSavedPlace = (e) => {};
 
   return (
     <Wrapper>
@@ -253,22 +260,24 @@ const Search = () => {
       </SavedPlaces>
       {showPlacesList && (
         <SavedPlacesListContainer>
-          {displaySavedPlacesList.map((item,index) => {
-            return(
-              item.post.placeslist.map((placeName,index)=>{
-                return (
-                  <Fragment key={index}>
+          {displaySavedPlacesList.map((item, index) => {
+            return item.post.placeslist.map((placeName, index) => {
+              return (
+                <Fragment key={index}>
                   <SavedPlacesList
                     onClick={(e) => onClickSavedPlace(e)}
                     key={index}
                   >
                     {placeName}
-                    <FontAwesomeIcon icon={faTrash} style={{color:'rgb(79 83 86)',cursor:"pointer"}} onClick={()=>onDeleteClick(item)}/>
+                    <FontAwesomeIcon
+                      icon={faTrash}
+                      style={{ color: "rgb(79 83 86)", cursor: "pointer" }}
+                      onClick={() => onDeleteClick(item)}
+                    />
                   </SavedPlacesList>
-                  </Fragment>
-                );
-              })
-            )
+                </Fragment>
+              );
+            });
           })}
         </SavedPlacesListContainer>
       )}

@@ -11,18 +11,18 @@ const Login = () => {
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
-      console.log("user",user)
+      console.log("user", user);
       if (user) {
         router.push("/");
       }
     });
   }, []);
 
-  const onClickSignInWithGOogle=()=>{
+  const onClickSignInWithGOogle = () => {
     signInWithPopup(auth, provider)
-    .then(result=>console.log(result))
-    .catch(error=>console.log(error))
-  }
+      .then((result) => console.log(result))
+      .catch((error) => console.log(error));
+  };
 
   return (
     <Wrapper>

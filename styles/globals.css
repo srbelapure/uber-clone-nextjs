@@ -15,13 +15,18 @@ a {
   box-sizing: border-box;
 }
 
-button.confirm-pickup[disabled]{
+button.confirm-pickup[disabled] {
   background-color: rgba(0, 0, 0, 0.2);
 }
 
 @keyframes ridedetails {
-  0%{left:15%;}
-  100%{left: 75%;}
+  0% {
+    left: 15%;
+  }
+
+  100% {
+    left: 75%;
+  }
 }
 
 .loader-component {
@@ -41,7 +46,7 @@ button.confirm-pickup[disabled]{
   animation-duration: 10s;
   animation-delay: 0s;
   animation-iteration-count: infinite;
-  animation-play-state: running; 
+  animation-play-state: running;
 
 
   background-color: gray;
@@ -68,7 +73,7 @@ button.confirm-pickup[disabled]{
 @-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
 @keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } } */
 
-.overlay-for-loading{
+.overlay-for-loading {
   position: fixed;
   width: 100vw;
   height: 100vh;
@@ -80,7 +85,7 @@ button.confirm-pickup[disabled]{
   width: 100%;
 }
 
-.destination-progress{
+.destination-progress {
   position: relative;
   z-index: 15000;
   top: 50%;
@@ -88,19 +93,19 @@ button.confirm-pickup[disabled]{
   margin: 0px auto;
 }
 
-::-webkit-progress-bar{
+::-webkit-progress-bar {
   height: 50px;
   border-radius: 20px;
-  background-color: rgb(133, 127, 127,0.98);
+  background-color: rgb(133, 127, 127, 0.98);
 }
 
-::-webkit-progress-value{
+::-webkit-progress-value {
   height: 50px;
   border-radius: 20px;
   background-color: rgb(164, 242, 164);
 }
 
-.destination-time{
+.destination-time {
   text-align: center;
   position: relative;
   bottom: 10px;
@@ -110,15 +115,20 @@ button.confirm-pickup[disabled]{
 
 @media screen and (max-width:500px) {
   @keyframes ridedetails {
-    0%{left:15%;}
-    100%{left: 35%;}
+    0% {
+      left: 15%;
+    }
+
+    100% {
+      left: 35%;
+    }
   }
 
-  .loader-component{
+  .loader-component {
     margin-left: 0px;
   }
 
-  .destination-progress{
+  .destination-progress {
     left: 0px;
     right: 0px;
     width: 100%;
