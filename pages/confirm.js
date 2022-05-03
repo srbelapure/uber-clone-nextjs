@@ -15,8 +15,6 @@ const Confirm = () => {
 
   const [pickUpCoordinates, setPickupCoordinates] = useState([0, 0]);
   const [dropoffCoordinates, setDropoffCoordinates] = useState([0, 0]);
-
-  const [showModal, setShowModal] = useState(false);
   const [confirmButtonEnabled, setConfirmButtomEnabled] = useState(false);
   const [confirmedridedetails, setConfirmedRideDetails] = useState([
     {
@@ -28,7 +26,6 @@ const Confirm = () => {
   const [rideConfirm, setRideConfirm] = useState(false);
   const [rideAtLocation, setRideAtLocation] = useState(false);
   const [startRide, setStartRide] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [rideReachTime, setRideReachTime] = useState(0);
   const [destinationReachTime, setDestinationReachTime] = useState(0);
@@ -129,10 +126,6 @@ const Confirm = () => {
     setStartRide(true);
   };
 
-  const handleIsLoadingProp = (value) => {
-    setIsLoading(value);
-  };
-
   const rideReachInTime = (value) => {
     setRideReachTime(value);
   };
@@ -150,15 +143,11 @@ const Confirm = () => {
       <Map
         pickUpCoordinates={pickUpCoordinates}
         dropoffCoordinates={dropoffCoordinates}
-        routemode={routemode}
         rideConfirm={rideConfirm}
         rideMinsAway={confirmedridedetails.time}
         propFromChild={handlePropFromChild}
         startRide={startRide}
-        propForIsLoading={handleIsLoadingProp}
-        dropofflocation={dropofflocation}
         rideWillReachInTime={rideReachInTime}
-        pickuplocation={pickuplocation}
       />
       {/* ride container */}
       <RidesContainer>

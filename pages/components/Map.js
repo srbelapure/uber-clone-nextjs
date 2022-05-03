@@ -9,10 +9,6 @@ mapboxgl.accessToken =
 
 const Map = (props) => {
   const [rideRouteMins, setRideRouteMins] = useState(0);
-  const [userLocationFromGeolocator, setUserLocationFromGeoLocator] = useState(
-    []
-  );
-  const [startRide, setStartRide] = useState(false);
   const [rideArrivedAtLocation, setRideArrivedAtLocation] = useState(false);
   const [rideArrivedAtDestination, setRideArrivedAtDestination] =
     useState(false);
@@ -238,7 +234,6 @@ import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
     ) {
       let rideReachTime = props.rideMinsAway * 10;
       showTimeLapse(0, rideReachTime);
-      props.propForIsLoading(true);
     }
 
     if (rideArrivedAtLocation === true && props.startRide === false) {
@@ -270,12 +265,7 @@ import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
         });
       });
       props.propFromChild(rideArrivedAtLocation);
-      props.propForIsLoading(false);
       clearInterval(timerId);
-    }
-
-    if (props.startRide === true) {
-      props.propForIsLoading(true);
     }
 
     if (rideArrivedAtDestination === true) {
@@ -306,7 +296,6 @@ import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
           },
         });
       });
-      props.propForIsLoading(false);
       clearInterval(timerId);
     }
   }, [
