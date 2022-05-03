@@ -136,9 +136,6 @@ const Confirm = () => {
   const rideReachInTime = (value) => {
     setRideReachTime(value);
   };
-
-  // console.log("_____ON_destinationReachTime",destinationReachTime)
-
   return (
     <Wrapper>
       <ButtonContainer>

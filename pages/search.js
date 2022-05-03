@@ -81,7 +81,6 @@ const Search = () => {
   };
 
   const onAddPickuptoList = () => {
-    console.log("*********", pickup, userLocation);
     if (pickup.trim() !== "") {
       // setSavedPlace(savedPlace.concat(pickup))
       setSavedPlaceList = [...setSavedPlaceList, pickup];
@@ -138,14 +137,11 @@ const Search = () => {
   });
 
   const onDeleteClick = (data) => {
-    console.log("data", data);
-    console.log("savedPlacelist", savedPlacelist);
     let idForDeletingPlacesFromDB = [];
     savedPlacelist.map((item) => {
       item.post.placeslist.map((placeName) => {
         data.post.placeslist.map((dataVal) => {
           if (dataVal === placeName) {
-            console.log("item.id", item.id);
             return (idForDeletingPlacesFromDB = [
               ...idForDeletingPlacesFromDB,
               item.id,
@@ -154,7 +150,6 @@ const Search = () => {
         });
       });
     });
-    console.log("idForDeletingPlacesFromDB", idForDeletingPlacesFromDB);
     idForDeletingPlacesFromDB.map((entryId) => {
       db.collection("savedplaces").doc(entryId).delete();
     });
