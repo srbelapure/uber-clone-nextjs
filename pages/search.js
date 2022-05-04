@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import { getAuth } from "firebase/auth";
 import { db } from "../firebase";
+import { collection, getDocs,onSnapshot ,doc,addDoc, deleteDoc } from "firebase/firestore";
 
 import GeoCoderInput from "./components/GeoCoderInput";
 import { useRouter } from "next/router";
@@ -19,11 +20,20 @@ const Search = () => {
   const [isDropoffBlurred,setIsDropoffBlurred] = useState(false)
 
   useEffect(() => {
-    const unsubscribe = db.collection("savedplaces").onSnapshot((snapshot) => {
-      setSavedPlace(
-        snapshot.docs.map((doc) => ({ id: doc.id, post: doc.data() }))
-      );
-    });
+    const unsubscribe = onSnapshot(
+      collection(db, "savedplaces"),
+      (snapshot) => {
+        setSavedPlace(
+          snapshot.docs.map((doc) => ({ id: doc.id, post: doc.data() }))
+        );
+      }
+    );
+
+    // const unsubscribe = db.collection("savedplaces").onSnapshot((snapshot) => {
+    //   setSavedPlace(
+    //     snapshot.docs.map((doc) => ({ id: doc.id, post: doc.data() }))
+    //   );
+    // });
     return () => {
       unsubscribe();
     };
@@ -97,11 +107,14 @@ const Search = () => {
     let list = setSavedPlaceList.filter((item, index) => {
       return setSavedPlaceList.indexOf(item) == index;
     });
-
-    db.collection("savedplaces").add({
+    addDoc(collection(db, "savedplaces"), {
       placeslist: list,
       userid: getAuth().currentUser.uid,
     });
+    // db.collection("savedplaces").add({
+    //   placeslist: list,
+    //   userid: getAuth().currentUser.uid,
+    // });
   };
 
   const onClickSavedPlaces = () => {
@@ -144,7 +157,8 @@ const Search = () => {
       });
     });
     idForDeletingPlacesFromDB.map((entryId) => {
-      db.collection("savedplaces").doc(entryId).delete();
+     // db.collection("savedplaces").doc(entryId).delete();
+     deleteDoc(doc(db, "savedplaces", entryId));
     });
   };
 

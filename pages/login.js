@@ -1,12 +1,12 @@
 import React, { useEffect,useState } from "react";
 import tw from "tailwind-styled-components";
 import { useRouter } from "next/dist/client/router";
-import { signInWithPopup, onAuthStateChanged } from "firebase/auth";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Form from 'react-bootstrap/Form'
 
 import { auth, provider, authWithEmail} from "../firebase";
+import {signInWithPopup , createUserWithEmailAndPassword, signInWithEmailAndPassword,updateProfile ,onAuthStateChanged } from "firebase/auth";
 
 const Login = () => {
   const [openLogin, setOpenLogin] = useState(false); // to open and close Sign in modal
@@ -26,9 +26,16 @@ const Login = () => {
   }, []);
 
   useEffect(() => {
-    //onAuthStateChanged => listens for every single time authentication change happens(login,logout,create user)
-    //authUser => survives a refresh, as it checks user cookie and is persistent
-    const unsubscribe = authWithEmail.onAuthStateChanged((authUser) => {
+    // const unsubscribe = authWithEmail.onAuthStateChanged((authUser) => {
+    //   if (authUser) {
+    //     //if user has logged inn
+    //     setUser(authUser);
+    //   } else {
+    //     // if user has loggedd out
+    //     setUser(null); // if user logs out set user to null
+    //   }
+    // });
+    const unsubscribe = onAuthStateChanged(authWithEmail, (authUser) => {
       if (authUser) {
         //if user has logged inn
         setUser(authUser);
@@ -66,24 +73,31 @@ const Login = () => {
 
   const onSignIn = (e) => {
     e.preventDefault();
-    authWithEmail
-      .signInWithEmailAndPassword(email, password)
-      .catch((error) => alert(error.message));
+    // authWithEmail
+    //   .signInWithEmailAndPassword(email, password)
+    //   .catch((error) => alert(error.message));
+    signInWithEmailAndPassword(auth,email,password)
     setOpenLogin(false);
   };
 
   const onSignUp = (e) => {
     e.preventDefault();
-    authWithEmail
-      .createUserWithEmailAndPassword(email, password) // email,password -> these are values from state
+    // authWithEmail
+    //   .createUserWithEmailAndPassword(email, password) // email,password -> these are values from state
+    //   .then((authUser) => {
+    //     return authUser.user.updateProfile({
+    //       displayName: username, //when user is created then add the username value to displayName attribute
+    //     });
+    //   })
+    createUserWithEmailAndPassword(auth, email, password)
       .then((authUser) => {
-        return authUser.user.updateProfile({
+        return updateProfile(auth.currentUser, {
           displayName: username, //when user is created then add the username value to displayName attribute
         });
       })
-      .then(() => {
-        router.push("/");
-      })
+      // .then(() => {
+      //   router.push("/");
+      // })
       .catch((error) => alert(error.message));
     setOpenSignUp(false);
   };

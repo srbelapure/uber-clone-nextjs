@@ -1,11 +1,10 @@
-import firebase from 'firebase/compat/app';
-import 'firebase/compat/firestore';
-import 'firebase/compat/auth';
+import { initializeApp } from "firebase/app"
 
 //GoogleAuthProvider -->> to get a popup
 import { GoogleAuthProvider, getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 
-const firebaseApp = firebase.initializeApp({
+const firebaseApp = {
   apiKey: "AIzaSyAQLJ3d6cIFQOnmBDmVhWT0ZLF-tp9aWas",
   authDomain: "uber-nextjs-clone-5f9e6.firebaseapp.com",
   projectId: "uber-nextjs-clone-5f9e6",
@@ -13,11 +12,13 @@ const firebaseApp = firebase.initializeApp({
   messagingSenderId: "105144095503",
   appId: "1:105144095503:web:fb65785b4cb36d2906a47a",
   measurementId: "G-F5MM36J138",
-  });
+  };
+
+const app = initializeApp(firebaseApp)
 
 const provider = new GoogleAuthProvider();
-const db = firebaseApp.firestore()
-const auth = getAuth();
-const authWithEmail = firebase.auth();
+const db = getFirestore(app)
+const auth = getAuth(app);
+const authWithEmail = getAuth();
 
 export { provider, auth ,db,authWithEmail};
