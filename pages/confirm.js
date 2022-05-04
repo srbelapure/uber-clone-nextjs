@@ -168,18 +168,22 @@ const Confirm = () => {
         </ConfirmButtonContainer>
       </RidesContainer>
       {rideConfirm && (
-      <div className="overlay-for-loading">
-          <div className="loader-component">
-            <div className="sub-loader-component">
-              Your ride is on the way
-              <br />
-              Will reach in {confirmedridedetails? (((confirmedridedetails.time)*10) - rideReachTime):''} seconds
-            </div>
+        <>
+          <div className="overlay-for-loading"></div>
+          <div className="sub-loader-component">
+            Your ride is on the way
+            <br />
+            Will reach in{" "}
+            {confirmedridedetails
+              ? confirmedridedetails.time * 10 - rideReachTime
+              : ""}{" "}
+            seconds
           </div>
-        </div>
+        </>
       )}
       {startRide && rideArrivedAtDestination === false && (
-      <div className="overlay-for-loading">
+        <>
+          <div className="overlay-for-loading"></div>
           <div className="destination-progress">
             <progress
               className="ride-reach-destination-progress"
@@ -191,7 +195,7 @@ const Confirm = () => {
               seconds{" "}
             </span>
           </div>
-      </div>
+        </>
       )}
       {rideArrivedAtDestination && (
         <RideSuccessfulModal moveToPageName={"Home"}>
