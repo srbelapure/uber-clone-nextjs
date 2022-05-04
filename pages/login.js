@@ -77,6 +77,7 @@ const Login = () => {
     //   .signInWithEmailAndPassword(email, password)
     //   .catch((error) => alert(error.message));
     signInWithEmailAndPassword(auth,email,password)
+    .catch((error) => alert(error.message));
     setOpenLogin(false);
   };
 
