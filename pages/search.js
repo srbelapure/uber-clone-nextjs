@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect, Fragment,useRef } from "react";
 import tw from "tailwind-styled-components";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -15,6 +15,8 @@ const Search = () => {
   const [userLocation, setUserLocation] = useState("");
   const [savedPlacelist, setSavedPlace] = useState([]);
   const [showPlacesList, setShowPlacesList] = useState(false);
+  const [isPickupBlurred,setIsPickupBlurred] = useState(false)
+  const [isDropoffBlurred,setIsDropoffBlurred] = useState(false)
 
   useEffect(() => {
     const unsubscribe = db.collection("savedplaces").onSnapshot((snapshot) => {
@@ -48,6 +50,7 @@ const Search = () => {
       timeout: 5000,
       maximumAge: 0,
     };
+    var temp = navigator.geolocation.getCurrentPosition(success, error, options);
 
     function success(pos) {
       var crd = pos.coords;
@@ -71,21 +74,20 @@ const Search = () => {
       console.warn(`ERROR(${err.code}): ${err.message}`);
     }
 
-    var temp = navigator.geolocation.watchPosition(success, error, options);
   };
 
   const onAddPickuptoList = () => {
-    if (pickup.trim() !== "") {
+    if (pickup && pickup.trim() !== "") {
       setSavedPlaceList = [...setSavedPlaceList, pickup];
     }
-    if (userLocation.trim() !== "") {
+    if (userLocation && userLocation.trim() !== "") {
       setSavedPlaceList = [...setSavedPlaceList, userLocation];
     }
     addToFirebaseDB();
   };
 
   const onAddDropofftoList = () => {
-    if (dropoff.trim() !== "") {
+    if (dropoff && dropoff.trim() !== "") {
       setSavedPlaceList = [...setSavedPlaceList, dropoff];
     }
     addToFirebaseDB();
@@ -151,7 +153,26 @@ const Search = () => {
     setPickup(e.target.value);
   };
 
-  const onClickSavedPlace = (e) => {};
+  const onClickSavedPlace = (e) => {
+    if (isPickupBlurred) {
+      setPickup(e.target.innerText);
+    } else if (isDropoffBlurred) {
+      setDropoff(e.target.innerText);
+    }
+    else{
+      alert("Please select pickup/dropoff")
+    }
+  };
+
+  function onBlur(val) {
+    if (val.target.id === "pickup-box") {
+      setIsPickupBlurred(true); // this means pickup is blurred
+      setIsDropoffBlurred(false); // and dropoff is focused
+    } else if (val.target.id === "dropoff-box") {
+      setIsDropoffBlurred(true);
+      setIsPickupBlurred(false);
+    }
+  }
 
   return (
     <Wrapper>
@@ -204,6 +225,7 @@ const Search = () => {
             onChange={(e) => onTypePickupLocation(e)}
             placeholder="Enter pickup location"
             inputValue={"pickup"}
+            onBlur={onBlur.bind(this)}
           />
           {/* <Input
             type="text"
@@ -217,6 +239,7 @@ const Search = () => {
             onChange={(e) => setDropoff(e.target.value)}
             placeholder="Enter drop-off location"
             inputValue={"dropoff"}
+            onBlur={onBlur.bind(this)}
           />
         </InputBoxes>
       </InputContainer>
@@ -254,12 +277,14 @@ const Search = () => {
                     onClick={(e) => onClickSavedPlace(e)}
                     key={index}
                   >
-                    {placeName}
-                    <FontAwesomeIcon
-                      icon={faTrash}
-                      style={{ color: "rgb(79 83 86)", cursor: "pointer" }}
-                      onClick={() => onDeleteClick(item)}
-                    />
+                    <SavedPlacesListName>{placeName}</SavedPlacesListName>
+                    <SavedPlacesListDeleteIcon>
+                      <FontAwesomeIcon
+                        icon={faTrash}
+                        style={{ color: "rgb(79 83 86)", cursor: "pointer" }}
+                        onClick={() => onDeleteClick(item)}
+                      />
+                    </SavedPlacesListDeleteIcon>
                   </SavedPlacesList>
                 </Fragment>
               );
@@ -325,4 +350,6 @@ const AddLocationToSavedPlacesContainer = tw.div`flex justify-center py-1`;
 const AddPickupLocationToSavedPlacesButton = tw.button`p-2 w-30 mb-2 w-50 bg-white mx-2 py-1`;
 const AddDropoffLocationToSavedPlacesButton = tw.button`p-2 w-30 mb-2 w-50 bg-white mx-2 py-1`;
 const SavedPlacesListContainer = tw.div``;
-const SavedPlacesList = tw.div`flex items-center justify-between bg-white p-2 border-2 border-solid border-gray-200 my-1`;
+const SavedPlacesList = tw.div`flex flex-row items-center justify-between bg-white p-2 border-2 border-solid border-gray-200 my-1`;
+const SavedPlacesListName = tw.div`flex-1/2 cursor-pointer`
+const SavedPlacesListDeleteIcon = tw.div`flex-1/2`

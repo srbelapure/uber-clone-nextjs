@@ -33,7 +33,7 @@ const RideSelector = (props) => {
       <CarList>
         {carList.map((item, index) => {
           return (
-            <Car key={index} onClick={() => props.onClick(item, rideduration)}>
+            <Car key={index} onClick={() => props.onClick(item, rideduration)} tabIndex="1">
               <CarImage src={item.imageUrl} alt={item.service} />
               <CarDetails>
                 <Service>{item.service}</Service>
@@ -56,7 +56,7 @@ export default RideSelector;
 const Wrapper = tw.div`flex flex-col flex-1 overflow-y-scroll`;
 const Title = tw.div`text-gray-500 text-xs text-center py-2 border-b`;
 const CarList = tw.div`overflow-y-scroll`;
-const Car = tw.div`flex p-4 items-center cursor-pointer hover:bg-gray-200`;
+const Car = tw.div`flex p-4 items-center cursor-pointer hover:bg-gray-200 focus:bg-gray-200`;
 const CarImage = tw.img`h-14 mr-4`;
 const CarDetails = tw.div`flex-1`;
 const Service = tw.div`font-medium`;

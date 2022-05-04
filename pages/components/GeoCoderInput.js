@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState , useRef} from "react";
 import tw from "tailwind-styled-components";
 
 const GeoCoderInput = (props) => {
@@ -8,6 +8,9 @@ const GeoCoderInput = (props) => {
     searchTime: new Date(),
     showResults: true,
   });
+
+  const inputPickupRef= useRef()
+  const inputDropOffRef= useRef()
 
   const onInput = (e) => {
     setOptionsState({ loading: true });
@@ -100,10 +103,13 @@ const GeoCoderInput = (props) => {
       {/* {input} */}
       <InputBoxLocation
         type="text"
+        id={props.inputValue === "pickup" ? 'pickup-box' : 'dropoff-box'}
         placeholder={props.placeholder}
         value={props.inputValue === "pickup" ? props.pickup : props.dropoff}
         onInput={onInput}
         onChange={props.onChange}
+        ref={props.inputValue === "pickup" ? inputPickupRef :inputDropOffRef}
+        onBlur={props.onBlur}
       />
 
       {optionsstate.results &&

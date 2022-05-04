@@ -19,59 +19,25 @@ button.confirm-pickup[disabled] {
   background-color: rgba(0, 0, 0, 0.2);
 }
 
-@keyframes ridedetails {
-  0% {
-    left: 15%;
-  }
-
-  100% {
-    left: 75%;
-  }
-}
-
 .loader-component {
   background-color: rgba(230, 224, 224, 0.477);
+
   position: absolute;
-  z-index: 2000;
   top: 50%;
   left: 50%;
+  transform: translate(-50%, -50%);
+
+  z-index: 2000;
+  top: 50%;
   width: 20%;
   height: 10%;
   margin: -60px 0 0 -60px;
-  /* -webkit-animation: spin 4s ease-in-out infinite;
-  -moz-animation: spin 4s ease-in-out infinite;
-  animation: spin 4s ease-in-out infinite; */
   border-radius: 100px;
-  animation-name: ridedetails;
-  animation-duration: 10s;
-  animation-delay: 0s;
-  animation-iteration-count: infinite;
-  animation-play-state: running;
-
-
   background-color: gray;
-  height: 8%;
-  width: 35%;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-
-/* .sub-loader-component {
-  position: relative;
-  top: 10px;
-  left: 20px;
-  background-color: black;
-  height: 10px;
-  width: 10px;
-  border-radius: 100px;
-  padding: 5px;
-}
-
-
-@-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
-@-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
-@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } } */
 
 .overlay-for-loading {
   position: fixed;
@@ -86,9 +52,12 @@ button.confirm-pickup[disabled] {
 }
 
 .destination-progress {
-  position: relative;
-  z-index: 15000;
+  position: absolute;
   top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  
+  z-index: 15000;
   border: none;
   margin: 0px auto;
 }
@@ -106,31 +75,29 @@ button.confirm-pickup[disabled] {
 }
 
 .destination-time {
-  text-align: center;
   position: relative;
   bottom: 10px;
   font-weight: 500;
-  display: block;
+  padding: 0px 20px;
 }
 
 @media screen and (max-width:500px) {
-  @keyframes ridedetails {
-    0% {
-      left: 15%;
-    }
-
-    100% {
-      left: 35%;
-    }
-  }
-
   .loader-component {
     margin-left: 0px;
+    width: 100%;
   }
 
   .destination-progress {
-    left: 0px;
-    right: 0px;
     width: 100%;
   }
+
+  .destination-time{
+    padding: 0px;
+  }
 }
+
+/* .container-fallback{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+} */

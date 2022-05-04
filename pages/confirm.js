@@ -21,6 +21,7 @@ const Confirm = () => {
       carname: "",
       minsaway: "",
       ridefare: "",
+      time:0
     },
   ]);
   const [rideConfirm, setRideConfirm] = useState(false);
@@ -167,18 +168,18 @@ const Confirm = () => {
         </ConfirmButtonContainer>
       </RidesContainer>
       {rideConfirm && (
-        <div className="overlay-for-loading">
+      <div className="overlay-for-loading">
           <div className="loader-component">
             <div className="sub-loader-component">
               Your ride is on the way
               <br />
-              Will reach in {10 - rideReachTime} seconds
+              Will reach in {confirmedridedetails? (((confirmedridedetails.time)*10) - rideReachTime):''} seconds
             </div>
           </div>
         </div>
       )}
       {startRide && rideArrivedAtDestination === false && (
-        <div className="overlay-for-loading">
+      <div className="overlay-for-loading">
           <div className="destination-progress">
             <progress
               className="ride-reach-destination-progress"
@@ -190,7 +191,7 @@ const Confirm = () => {
               seconds{" "}
             </span>
           </div>
-        </div>
+      </div>
       )}
       {rideArrivedAtDestination && (
         <RideSuccessfulModal moveToPageName={"Home"}>
@@ -212,6 +213,7 @@ const ButtonContainer = tw.div`rounded-full absolute z-10 top-4 left-4 bg-white 
 const BackButton = tw.img`h-full object-contain`;
 const ConfirmButton = tw.button`w-1/2 bg-black text-white w-screen my-4 text-center py-4 text-xl disabled:cursor-not-allowed`;
 const LoaderContainer = tw.div`bg-green-300 px-6 py-6 position-relative bottom-20`;
+const OverLay = tw.div`fixed z-18 w-screen h-screen bg-neutral-600 bg-opacity-60`
 
 // TO add pointers over map, search add markers to map in mapbox -> https://docs.mapbox.com/mapbox-gl-js/example/add-a-marker/  ---> refer addToMap() in Map.js
 
