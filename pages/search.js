@@ -287,11 +287,10 @@ const Search = () => {
             return item.post.placeslist.map((placeName, index) => {
               return (
                 <Fragment key={index}>
-                  <SavedPlacesList
-                    onClick={(e) => onClickSavedPlace(e)}
-                    key={index}
-                  >
-                    <SavedPlacesListName>{placeName}</SavedPlacesListName>
+                  <SavedPlacesList key={index}>
+                    <SavedPlacesListName onClick={(e) => onClickSavedPlace(e)}>
+                      {placeName}
+                    </SavedPlacesListName>
                     <SavedPlacesListDeleteIcon>
                       <FontAwesomeIcon
                         icon={faTrash}

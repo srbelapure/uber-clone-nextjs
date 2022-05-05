@@ -10,7 +10,7 @@ function RideSuccessfulModal(props) {
   const handleClose = () => {
     setShow(false);
     if (props.moveToPageName === "Home") {
-      router.push("/");
+      router.push("/home");
     } else if (props.moveToPageName === "Search") {
       router.push("/search");
     }
