@@ -14,11 +14,13 @@ const firebaseApp = {
   measurementId: "G-F5MM36J138",
   };
 
+// Initialize Firebase
 const app = initializeApp(firebaseApp)
 
 const provider = new GoogleAuthProvider();
-const db = getFirestore(app)
+const db = getFirestore()
 const auth = getAuth(app);
-const authWithEmail = getAuth();
+//const authWithEmail = getAuth();
 
-export { provider, auth ,db,authWithEmail};
+// export { provider, auth ,db,authWithEmail};
+export { provider, auth,db};
