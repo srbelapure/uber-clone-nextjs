@@ -35,7 +35,7 @@ const Login = () => {
     //     setUser(null); // if user logs out set user to null
     //   }
     // });
-    const unsubscribe = onAuthStateChanged(authWithEmail, (authUser) => {
+    const unsubscribe = onAuthStateChanged(auth, (authUser) => {
       if (authUser) {
         //if user has logged inn
         setUser(authUser);
